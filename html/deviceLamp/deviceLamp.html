@@ -62,13 +62,16 @@
   <option value="lampStatusHgw">HGW</option>
   <option value="lampStatusOnu">ONU</option>
   <option value="lampStatusSmallOnu">小型ONU</option>
+  <option value="lampStatusVdsl">VDSLモデム</option>
 </select>
 
 <!-- 機器別の表示エリア -->
 <div id="lampStatusHgw" class="lampStatus" style="display: none;"></div>
 <div id="lampStatusOnu" class="lampStatus" style="display: none;"></div>
 <div id="lampStatusSmallOnu" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusVdsl" class="lampStatus" style="display: none;"></div>
 <script>
+  // === ランプ状態の定義データ ===
   const descriptions = {
     'lampStatusHgw': {
       'routerPowerSupply': {
@@ -224,9 +227,41 @@
           '上：赤 / 下：赤': { text: '機器の故障。', alert: true }
         }
       }
+    },
+    'lampStatusVdsl': {
+      'power': {
+        'label': '電源\n(POWER)',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '消灯': { text: '装置の電源が入っていません。電源アダプタの抜けがないか確認してください。', alert: true }
+        }
+      },
+      'vdsl': {
+        'label': 'VDSL\n(LINE)',
+        'options': {
+          '緑点灯': { text: '正常（VDSL回線が確立しています）' },
+          '緑点滅': { text: '同期中・接続確立の準備中です。点灯に変わるまでお待ちください。' },
+          '消灯': { text: 'VDSL回線が不確立です。モジュラージャック（壁の差し込み口）の配線が抜けていないか確認してください。', alert: true }
+        }
+      },
+      'lan': {
+        'label': 'LAN\n(PC)',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '緑点滅': { text: '正常（通信中）' },
+          '消灯': { text: 'ルーターやPCなどの端末機器とのリンクが確立されていません。LANケーブルを確認してください。', alert: true }
+        }
+      },
+      'alarm': {
+        'label': 'アラーム\n(FAIL)',
+        'options': {
+          '赤点灯': { text: '装置故障状態。モデムの電源を入れ直しても改善しない場合は機器交換の可能性があります。', alert: true },
+          '消灯': { text: '正常' }
+        }
+      }
     }
   };
-
+  // === フォーム動的生成ロジック ===
   function renderDeviceForms(deviceId) {
     const container = document.getElementById(deviceId);
     if (!container) return;
@@ -294,6 +329,7 @@
     document.getElementById('copyMsg').style.display = 'none';
   }
 
+  // 機器タイプ変更イベント
   document.getElementById('onuSelect').addEventListener('change', (e) => {
     document.querySelectorAll('.lampStatus').forEach(el => {
       el.style.display = 'none';
@@ -309,6 +345,7 @@
     }
   });
 
+  // コピー機能
   document.getElementById('copyBtn').addEventListener('click', () => {
     const onuSelect = document.getElementById('onuSelect');
     const selectedDeviceText = onuSelect.options[onuSelect.selectedIndex].text;

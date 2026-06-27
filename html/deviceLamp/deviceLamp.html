@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>機器ランプ状態</title>
+  <style>
+    .lampStatus {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .row-container {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    .row-container label {
+      width: 180px; 
+      font-weight: bold;
+      font-size: 14px;
+      white-space: pre-line;
+      line-height: 1.3;
+    }
+    .sub-select {
+      padding: 4px;
+      font-size: 14px;
+      margin-top: -2px;
+    }
+    .side-description {
+      padding: 6px 12px;
+      background-color: #f0f8ff;
+      border-left: 4px solid #007bff;
+      font-size: 14px;
+      border-radius: 4px;
+      line-height: 1.4;
+    }
+    .side-description.alert {
+      background-color: #fff0f0;
+      border-left-color: #dc3545;
+      color: #dc3545;
+    }
+    .copy-message {
+      margin-left: 10px;
+      font-size: 14px;
+      color: #28a745;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<button id="clearBtn" type="button">すべてクリア</button>
+<button id="copyBtn" type="button">内容をコピー</button>
+<span id="copyMsg" class="copy-message">コピーしました！</span>
+<br><br>
+
+機器ランプ状態<br>
+<select id="onuSelect">
+  <option value="">--機器タイプを選択してください--</option>
+  <option value="lampStatusHgw">HGW</option>
+  <option value="lampStatusOnu">ONU</option>
+  <option value="lampStatusSmallOnu">小型ONU</option>
+</select>
+
+<!-- 機器別の表示エリア -->
+<div id="lampStatusHgw" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusOnu" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusSmallOnu" class="lampStatus" style="display: none;"></div>
+<script>
+  const descriptions = {
+    'lampStatusHgw': {
+      'routerPowerSupply': {
+        'label': 'ルータ電源',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '消灯': { text: '電源が入っていない', alert: true }
+        }
+      },
+      'alarm': {
+        'label': 'アラーム',
+        'options': {
+          '赤点灯': { text: '装置障害', alert: true },
+          '赤点滅（最大１０秒）': { text: 'ＵＳＢポートの異常を検出', alert: true },
+          '消灯': { text: '正常' }
+        }
+      },
+      'ppp': {
+        'label': 'ＰＰＰ',
+        'options': {
+          '緑点灯': { text: '接続中' },
+          '橙点灯': { text: '２セッション以上接続中' },
+          '消灯': { text: '未接続', alert: true }
+        }
+      },
+      'hikariTel': {
+        'label': 'ひかり電話',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '緑点滅': { text: 'ひかり電話　通話中／着信中／呼び出し中' },
+          '消灯': { text: 'ひかり電話が利用できない', alert: true }
+        }
+      },
+      'act': {
+        'label': 'ＡＣＴ',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '緑点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' },
+          '消灯': { text: '異常', alert: true }
+        }
+      },
+      'registration': {
+        'label': '登録',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '緑点滅': { text: 'ひかり電話の設定中' },
+          '赤点灯': { text: 'ひかり電話の設定失敗（認証エラー）', alert: true },
+          '赤点滅': { text: 'ひかり電話の設定失敗（その他のエラー）', alert: true },
+          '消灯': { text: 'ひかり電話　未設定', alert: true }
+        }
+      },
+      'initialStatus': {
+        'label': '初期状態',
+        'options': {
+          '橙点灯': { text: '工場出荷時状態または、ＯＮＵ機能のみ有効' },
+          '橙点滅': { text: 'ＩＰアドレスが重複している', alert: true },
+          '消灯': { text: '正常' }
+        }
+      },
+      'optionLamp': {
+        'label': 'オプション',
+        'options': {
+          '緑点灯': { text: 'ＯＮＵ機能のみ利用可' },
+          '緑点滅': { text: '「無線ＬＡＮ簡単セットアップ」設定中または、内蔵無線ＬＡＮが５ＧＨｚ帯で動作中' },
+          '青点滅・点灯': { text: '３回点滅後、２秒点灯：ＵＳＢポートに機器が接続された' },
+          '消灯': { text: '内蔵無線ＬＡＮが無効' }
+        }
+      },
+      'authLamp': {
+        'label': '認証',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '消灯': { text: '装置運用準備中または装置故障', alert: true }
+        }
+      },
+      'uniLamp': {
+        'label': 'ＵＮＩ',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '緑点滅': { text: 'ＯＮＵ機能　データ通信中' },
+          '消灯': { text: 'ＯＮＵ機能　利用不可', alert: true }
+        }
+      },
+      'hikariLine': {
+        'label': '光回線',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '橙点灯': { text: '装置運用準備中または装置故障', alert: true },
+          '橙点滅': { text: 'ＯＮＵ機能 ファームウェアダウンロード中' },
+          '消灯': { text: '未接続', alert: true }
+        }
+      },
+      'powerLamp': {
+        'label': '電源',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '赤点灯': { text: '故障', alert: true },
+          '赤点滅': { text: 'ＯＮＵ機能 ファームウェアダウンロード完了' },
+          '消灯': { text: '電源が切れている', alert: true }
+        }
+      },
+      'videoOutput': {
+        'label': '映像出力\n※[PR-600KI/GV-ONU]の場合のみ',
+        'options': {
+          '緑点灯': { text: '映像サービス 利用可' },
+          '赤点灯': { text: '故障', alert: true },
+          '消灯': { text: '映像サービス 利用不可' }
+        }
+      }
+    },
+    'lampStatusOnu': {
+      'auth': {
+        'label': '認証\n(AUTH)',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '消灯': { text: '装置運用準備中または故障発生状態', alert: true }
+        }
+      },
+      'uni': {
+        'label': 'ＵＮＩ',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '緑点滅': { text: '正常（通信中）' },
+          '消灯': { text: '端末機器（ひかり電話ルータ・市販無線ルータ等）とのリンクが確立されていません➡配線の抜けや緩みの確認方法をご確認ください', alert: true }
+        }
+      },
+      'hikariLine': {
+        'label': '光回線\n(PON/TEST)',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '橙点灯': { text: '装置運用準備中または故障発生状態', alert: true },
+          '橙点滅': { text: 'ソフトウェアのダウンロード中のため、しばらくそのままお待ちください。' },
+          '消灯': { text: '光の信号が届いていない可能性があります➡NTT製機器の光回線ランプが消灯しているをご確認ください', alert: true }
+        }
+      },
+      'power': {
+        'label': '電源\n(POWER)',
+        'options': {
+          '緑点灯': { text: '正常' },
+          '赤点灯': { text: '装置故障状態。ランプ状態が変わらない場合は電源の入れ直しをお願いいたします。', alert: true },
+          '赤点滅': { text: 'ソフトウェアのダウンロード中もしくはダウンロード完了状態のため、自動的に再起動されるのをお待ちください。' },
+          '消灯': { text: '装置の電源が入っておりません', alert: true }
+        }
+      }
+    },
+    'lampStatusSmallOnu': {
+      'smallOnuStatus': {
+        'label': 'ランプ状態\n(上下2つの組み合わせ)',
+        'options': {
+          '上：緑 / 下：緑': { text: '正常（電源が入っており、光回線・認証も問題ありません）' },
+          '上：赤 / 下：消灯': { text: '光信号が届いていません。光コンセントからのケーブルが緩んでいないか確認してください。', alert: true },
+          '上：赤 / 下：緑': { text: '未認証またはMACアドレス相違。', alert: true },
+          '上：赤 / 下：赤': { text: '機器の故障。', alert: true }
+        }
+      }
+    }
+  };
+
+  function renderDeviceForms(deviceId) {
+    const container = document.getElementById(deviceId);
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    const deviceData = descriptions[deviceId];
+    if (!deviceData) return;
+
+    Object.keys(deviceData).forEach(selectId => {
+      const item = deviceData[selectId];
+      
+      const row = document.createElement('div');
+      row.className = 'row-container';
+
+      const label = document.createElement('label');
+      label.setAttribute('for', selectId);
+      label.textContent = item.label;
+
+      const select = document.createElement('select');
+      select.id = selectId;
+      select.className = 'sub-select';
+
+      let optionsHtml = '<option value="">--ランプ状態を選択してください--</option>';
+      Object.keys(item.options).forEach(key => {
+        optionsHtml += `<option value="${key}">${key}</option>`;
+      });
+      select.innerHTML = optionsHtml;
+
+      const span = document.createElement('span');
+      span.className = 'side-description';
+      span.style.display = 'none';
+
+      select.addEventListener('change', (e) => {
+        const selectedValue = e.target.value;
+        span.classList.remove('alert');
+
+        if (selectedValue && item.options[selectedValue]) {
+          const targetData = item.options[selectedValue];
+          span.textContent = targetData.text;
+          span.style.display = 'inline-block';
+
+          if (targetData.alert) {
+            span.classList.add('alert');
+          }
+        } else {
+          span.textContent = '';
+          span.style.display = 'none';
+        }
+      });
+
+      row.appendChild(label);
+      row.appendChild(select);
+      row.appendChild(span);
+      container.appendChild(row);
+    });
+  }
+
+  function resetForm() {
+    document.getElementById('onuSelect').value = '';
+    document.querySelectorAll('.lampStatus').forEach(el => {
+      el.style.display = 'none';
+      el.innerHTML = '';
+    });
+    document.getElementById('copyMsg').style.display = 'none';
+  }
+
+  document.getElementById('onuSelect').addEventListener('change', (e) => {
+    document.querySelectorAll('.lampStatus').forEach(el => {
+      el.style.display = 'none';
+      el.innerHTML = '';
+    });
+    document.getElementById('copyMsg').style.display = 'none';
+
+    const deviceId = e.target.value;
+    if (deviceId) {
+      renderDeviceForms(deviceId);
+      const target = document.getElementById(deviceId);
+      if (target) target.style.display = 'flex';
+    }
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const onuSelect = document.getElementById('onuSelect');
+    const selectedDeviceText = onuSelect.options[onuSelect.selectedIndex].text;
+    
+    if (!onuSelect.value) {
+      alert('ONUタイプを選択してください。');
+      return;
+    }
+
+    let copyText = `【機器タイプ】: ${selectedDeviceText}\n`;
+    const activeContainer = document.getElementById(onuSelect.value);
+    const rows = activeContainer.querySelectorAll('.row-container');
+    
+    let hasInput = false;
+    rows.forEach(row => {
+      const labelText = row.querySelector('label').textContent.replace('\n', ' ');
+      const select = row.querySelector('select');
+      
+      if (select.value) {
+        hasInput = true;
+        copyText += `・${labelText}: ${select.value}\n`;
+      }
+    });
+
+    if (!hasInput) {
+      alert('ランプ状態を1つ以上選択してください。');
+      return;
+    }
+
+    navigator.clipboard.writeText(copyText).then(() => {
+      const msg = document.getElementById('copyMsg');
+      msg.style.display = 'inline';
+      setTimeout(() => {
+        msg.style.display = 'none';
+      }, 2000);
+    }).catch(err => {
+      alert('コピーに失敗しました: ' + err);
+    });
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', resetForm);
+</script>
+</body>
+</html>

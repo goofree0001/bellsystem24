@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>ルーターメーカー選択</title>
+	<style>
+		/* 初期状態ではコピーメッセージを非表示にする */
+		.copy-message {
+			display: none;
+			color: green;
+			margin-left: 10px;
+		}
+	</style>
+</head>
+<body>
+
+<button id="clearBtn" type="button">すべてクリア</button>
+<button id="copyBtn" type="button">内容をコピー</button>
+<span id="copyMsg" class="copy-message">コピーしました！</span>
+<br><br>
+
+ルーターメーカー選択<br>
+	<select id="routerMaker">
+		<option value="">--ルーターのメーカーを選択してください--</option>
+		<option value="buffalo">バッファロー (BUFFALO)</option>
+		<option value="nec">NEC (Aterm)</option>
+		<option value="elecom">エレコム (ELECOM)</option>
+		<option value="iodata">アイ・オー・データ (I-O DATA)</option>
+		<option value="tplink">TP-Link</option>
+		<option value="asus">ASUS (エイスース)</option>
+		<option value="cisco">シスコシステムズ (Cisco)</option>
+		<option value="yamaha">ヤマハ (YAMAHA)</option>
+		<option value="netgear">ネットギア (NETGEAR)</option>
+	</select>
+
+<script>
+	// 要素を取得
+	const routerMaker = document.getElementById('routerMaker');
+	const clearBtn = document.getElementById('clearBtn');
+	const copyBtn = document.getElementById('copyBtn');
+	const copyMsg = document.getElementById('copyMsg');
+
+	// すべてクリアボタンの処理
+	clearBtn.addEventListener('click', () => {
+		routerMaker.value = ""; // 初期選択に戻す
+	});
+
+	// 内容をコピーボタンの処理
+	copyBtn.addEventListener('click', () => {
+		// 選択されている選択肢の「テキスト（例：バッファロー (BUFFALO)）」を取得
+		const selectedText = "ルーターメーカー:" + routerMaker.options[routerMaker.selectedIndex].text + "\n";
+		
+		// 未選択（初期値）の場合は処理をスキップ
+		if (routerMaker.value === "") {
+			alert("メーカーを選択してください。");
+			return;
+		}
+
+		// クリップボードにコピー
+		navigator.clipboard.writeText(selectedText).then(() => {
+			// コピー成功時にメッセージを表示
+			copyMsg.style.display = 'inline';
+			
+			// 2秒後にメッセージを消す
+			setTimeout(() => {
+				copyMsg.style.display = 'none';
+			}, 2000);
+		}).catch(err => {
+			console.error('コピーに失敗しました: ', err);
+		});
+	});
+</script>
+
+</body>
+</html>

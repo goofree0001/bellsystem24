@@ -61,7 +61,7 @@
   <option value="">--機器タイプを選択してください--</option>
   <option value="lampStatusHgw">HGW（ホームゲートウェイ）</option>
   <option value="lampStatusOnu">ONU（光回線終端装置）</option>
-  <option value="lampStatusSmallOnu">小型ONU</option>
+  <option value="lampStatusSmallOnu">小型ONU（RX,RSが対応）</option>
   <option value="lampStatusVdsl">VDSLモデム</option>
 </select>
 
@@ -174,7 +174,7 @@
         }
       },
       'videoOutput': {
-        'label': '映像出力\n※[PR-600KI/GV-ONU]の場合のみ',
+        'label': '映像出力\n※[PR-600KI/GV-ONU]\nの場合のみ',
         'options': {
           '緑点灯': { text: '映像サービス 利用可' },
           '赤点灯': { text: '故障', alert: true },
@@ -261,6 +261,7 @@
       }
     }
   };
+
   // === フォーム動的生成ロジック ===
   function renderDeviceForms(deviceId) {
     const container = document.getElementById(deviceId);
@@ -298,6 +299,9 @@
       select.addEventListener('change', (e) => {
         const selectedValue = e.target.value;
         span.classList.remove('alert');
+        
+        // ユーザーが選択を変更したら「コピーしました」を非表示にする
+        document.getElementById('copyMsg').style.display = 'none';
 
         if (selectedValue && item.options[selectedValue]) {
           const targetData = item.options[selectedValue];
@@ -361,7 +365,7 @@
     
     let hasInput = false;
     rows.forEach(row => {
-      const labelText = row.querySelector('label').textContent.replace('\n', ' ');
+      const labelText = row.querySelector('label').textContent.replace(/\n/g, ' ');
       const select = row.querySelector('select');
       
       if (select.value) {
@@ -376,11 +380,9 @@
     }
 
     navigator.clipboard.writeText(copyText).then(() => {
+      // ずっと表示を維持するためsetTimeoutを削除
       const msg = document.getElementById('copyMsg');
       msg.style.display = 'inline';
-      setTimeout(() => {
-        msg.style.display = 'none';
-      }, 2000);
     }).catch(err => {
       alert('コピーに失敗しました: ' + err);
     });

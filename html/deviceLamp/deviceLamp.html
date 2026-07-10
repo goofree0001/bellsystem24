@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>機器ランプ状態</title>
   <style>
+    th {
+      text-align: left;
+      font-weight: normal;
+      padding-right: 10px;
+    }
     .lampStatus {
       display: flex;
       flex-direction: column;
@@ -47,6 +52,30 @@
       font-weight: bold;
       display: none;
     }
+    .action-checkboxes {
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    .action-checkboxes table {
+      border-collapse: collapse;
+    }
+    .action-checkboxes tr {
+      height: 28px;
+    }
+    .action-checkboxes label {
+      cursor: pointer;
+    }
+    .section-title {
+      font-weight: bold;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+    .device-selector-area select {
+      margin-bottom: 8px;
+      padding: 4px;
+      font-size: 14px;
+      width: 350px;
+    }
   </style>
 </head>
 <body>
@@ -56,225 +85,201 @@
 <span id="copyMsg" class="copy-message">コピーしました！</span>
 <br><br>
 
-機器ランプ状態<br>
-<select id="onuSelect">
-  <option value="">--機器タイプを選択してください--</option>
-  <option value="lampStatusHgw">HGW（ホームゲートウェイ）</option>
-  <option value="lampStatusOnu">ONU（光回線終端装置）</option>
-  <option value="lampStatusSmallOnu">小型ONU（RX,RSが対応）</option>
-  <option value="lampStatusVdsl">VDSLモデム</option>
-</select>
+<div class="section-title">【対応状況】</div>
+<div class="action-checkboxes">
+  <table>
+    <tr>
+      <th>・電源入れ直し</th>
+      <td>
+        <label><input type="checkbox" id="powerReset">実施済み</label><br>
+      </td>
+    </tr>
+    <tr>
+      <th>・ケーブル入れ直し</th>
+      <td>
+        <label><input type="checkbox" id="cableReset">実施済み</label><br>
+      </td>
+    </tr>
+  </table>
+</div>
+<br>
 
-<!-- 機器別の表示エリア -->
-<div id="lampStatusHgw" class="lampStatus" style="display: none;"></div>
+<div class="section-title">【機器情報】</div>
+<div class="device-selector-area">
+  【ONU,VDSL選択】<br>
+  <select id="onuVdslSelect">
+    <option value="">--ONU,VDSLを選択してください--</option>
+    <option value="GE-ONU">GE-ONU（一般型）</option>
+    <option value="GE-PON">GE-PON（一般型）</option>
+    <option value="10G-ONU">10G-ONU（10ギガ専用）</option>
+    <option value="V-ONU">V-ONU（映像専用）</option>
+    <option value="GV-ONU">GV-ONU（ネット・テレビ一体型）</option>
+    <option value="VH-100">VH-100（VDSLモデム）</option>
+    <option value="VDSL〈N〉B-100">VDSL〈N〉B-100（VDSLモデム）</option>
+    <option value="VDSL〈N〉B-100E">VDSL〈N〉B-100E（VDSLモデム）</option>
+    <option value="小型ONU">小型ONU（スティック型）</option>
+  </select>
+  <br>
+
+<div class="section-title">【機器ランプ状態】</div>
 <div id="lampStatusOnu" class="lampStatus" style="display: none;"></div>
 <div id="lampStatusSmallOnu" class="lampStatus" style="display: none;"></div>
 <div id="lampStatusVdsl" class="lampStatus" style="display: none;"></div>
+<br>
+
+  【HGW型式選択】<br>
+  <select id="hgwTypeSelect">
+    <option value="">--HGWの型式を選択してください--</option>
+    <option value="PR-600">「PR-600」HGW(最新10G対応/ONU・映像一体型)</option>
+    <option value="PR-500">「PR-500」HGW(ONU・映像一体型/無線対応型)</option>
+    <option value="PR-400">「PR-400」HGW(従来型ONU・映像一体型)</option>
+    <option value="PR-S300">「PR-S300」HGW(300号世代ONU一体型)</option>
+    <option value="PR-">「PR-」HGW(従来型ONU一体型/無線LANカード対応)</option>
+    <option value="RS-">「RS-」HGW(小型ONU対応/無線LAN機能内蔵型)</option>
+    <option value="RT-500">「RT-500」HGW(無線対応単体型)</option>
+    <option value="RT-400">「RT-400」HGW(従来型単体型)</option>
+    <option value="RT-S300">「RT-S300」HGW(300号世代単体型)</option>
+    <option value="RT-">「RT-」HGW(従来型単体型/無線LANカード対応)</option>
+    <option value="RV-440">「RV-440」HGW(VDSL一体型)</option>
+    <option value="RV-S340">「RV-S340」HGW(340号世代VDSL一体型)</option>
+    <option value="RV-">「RV-」HGW(VDSL一体型/従来型)</option>
+    <option value="RX-601">「RX-601」HGW(最新10G/無線内蔵型)</option>
+    <option value="RX-600">「RX-600」HGW(最新10G対応/従来型単体型)</option>
+    <option value="RX-">「RX-」HGW(従来型単体型)</option>
+    <option value="XG-200">「XG-200」HGW(フレッツ光クロス対応)</option>
+    <option value="XG-100">「XG-100」HGW(フレッツ光クロス対応)</option>
+  </select>
+  <br>
+
+  【HGW世代選択】<br>
+  <select id="hgwGenerationSelect">
+    <option value="">--HGWの世代を選択してください--</option>
+    <option value="601">601</option>
+    <option value="600">600</option>
+    <option value="500">500</option>
+    <option value="440">440</option>
+    <option value="400">400</option>
+    <option value="S340">S340</option>
+    <option value="A340">A340</option>
+    <option value="S300">S300</option>
+    <option value="A300">A300</option>
+    <option value="230">230</option>
+    <option value="200">200</option>
+    <option value="100">100</option>
+  </select>
+  <br>
+
+  【HGWメーカー選択】<br>
+  <select id="hgwMakerSelect">
+    <option value="">--HGWのメーカーを選択してください--</option>
+    <option value="KI">KI：沖電気工業（OKI）</option>
+    <option value="HI">HI：日立（現：日立情報通信エンジニアリング）</option>
+    <option value="MI">MI：三菱電機（Mitsubishi Electric）</option>
+    <option value="NE">NE：NEC（NECプラットフォームズ）</option>
+    <option value="SE">SE：住友電工ネットワークス（Sumitomo Electric）</option>
+  </select>
+</div>
+<br>
+
+<div class="section-title">【機器ランプ状態】</div>
+<div id="lampStatusHgw" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusXg200" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusXg100" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusRx601" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusRx600" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusPr600" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusPr500" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusRt500" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusPr400" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusRt400" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusRv440" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusPrS300" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusRtS300" class="lampStatus" style="display: none;"></div>
+<div id="lampStatusRvS340" class="lampStatus" style="display: none;"></div>
+
 <script>
-  // === ランプ状態の定義データ ===
-  const descriptions = {
-    'lampStatusHgw': {
-      'routerPowerSupply': {
-        'label': 'ルータ電源',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '消灯': { text: '電源が入っていない', alert: true }
-        }
-      },
-      'alarm': {
-        'label': 'アラーム',
-        'options': {
-          '赤点灯': { text: '装置障害', alert: true },
-          '赤点滅（最大１０秒）': { text: 'ＵＳＢポートの異常を検出', alert: true },
-          '消灯': { text: '正常' }
-        }
-      },
-      'ppp': {
-        'label': 'ＰＰＰ',
-        'options': {
-          '緑点灯': { text: '接続中' },
-          '橙点灯': { text: '２セッション以上接続中' },
-          '消灯': { text: '未接続', alert: true }
-        }
-      },
-      'hikariTel': {
-        'label': 'ひかり電話',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '緑点滅': { text: 'ひかり電話　通話中／着信中／呼び出し中' },
-          '消灯': { text: 'ひかり電話が利用できない', alert: true }
-        }
-      },
-      'act': {
-        'label': 'ＡＣＴ',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '緑点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' },
-          '消灯': { text: '異常', alert: true }
-        }
-      },
-      'registration': {
-        'label': '登録',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '緑点滅': { text: 'ひかり電話の設定中' },
-          '赤点灯': { text: 'ひかり電話の設定失敗（認証エラー）', alert: true },
-          '赤点滅': { text: 'ひかり電話の設定失敗（その他のエラー）', alert: true },
-          '消灯': { text: 'ひかり電話　未設定', alert: true }
-        }
-      },
-      'initialStatus': {
-        'label': '初期状態',
-        'options': {
-          '橙点灯': { text: '工場出荷時状態または、ＯＮＵ機能のみ有効' },
-          '橙点滅': { text: 'ＩＰアドレスが重複している', alert: true },
-          '消灯': { text: '正常' }
-        }
-      },
-      'option': {
-        'label': 'オプション',
-        'options': {
-          '緑点灯': { text: 'ＯＮＵ機能のみ利用可' },
-          '緑点滅': { text: '「無線ＬＡＮ簡単セットアップ」設定中または、内蔵無線ＬＡＮが５ＧＨｚ帯で動作中' },
-          '青点滅・点灯': { text: '３回点滅後、２秒点灯：ＵＳＢポートに機器が接続された' },
-          '消灯': { text: '内蔵無線ＬＡＮが無効' }
-        }
-      },
-      'auth': {
-        'label': '認証',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '消灯': { text: '装置運用準備中または装置故障', alert: true }
-        }
-      },
-      'uni': {
-        'label': 'ＵＮＩ',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '緑点滅': { text: 'ＯＮＵ機能　データ通信中' },
-          '消灯': { text: 'ＯＮＵ機能　利用不可', alert: true }
-        }
-      },
-      'hikariLine': {
-        'label': '光回線',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '橙点灯': { text: '装置運用準備中または装置故障', alert: true },
-          '橙点滅': { text: 'ＯＮＵ機能 ファームウェアダウンロード中' },
-          '消灯': { text: '未接続', alert: true }
-        }
-      },
-      'power': {
-        'label': '電源',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '赤点灯': { text: '故障', alert: true },
-          '赤点滅': { text: 'ＯＮＵ機能 ファームウェアダウンロード完了' },
-          '消灯': { text: '電源が切れている', alert: true }
-        }
-      },
-      'videoOutput': {
-        'label': '映像出力\n※[PR-600KI/GV-ONU]\nの場合のみ',
-        'options': {
-          '緑点灯': { text: '映像サービス 利用可' },
-          '赤点灯': { text: '故障', alert: true },
-          '消灯': { text: '映像サービス 利用不可' }
-        }
-      }
+  // 各機器タイプごとの基本ランプパターンを共通定義
+  const patterns = {
+    // 従来型の標準的なHGWパターン（PR-400, RV-440, RS, RT等で共通）
+    hgwStandard: {
+      'routerPowerSupply': { 'label': 'ルータ電源', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '電源が入っていない', alert: true } } },
+      'alarm': { 'label': 'アラーム', 'options': { '赤点灯': { text: '装置障害', alert: true }, '赤点滅（最大１０秒）': { text: 'ＵＳＢポートの異常を検出', alert: true }, '消灯': { text: '正常' } } },
+      'ppp': { 'label': 'ＰＰＰ', 'options': { '緑点灯': { text: '接続中' }, '橙点灯': { text: '２セッション以上接続中' }, '消灯': { text: '未接続', alert: true } } },
+      'hikariTel': { 'label': 'ひかり電話', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話　通話中／着信中／呼び出し中' }, '消灯': { text: 'ひかり電話が利用できない', alert: true } } },
+      'act': { 'label': 'ＡＣＴ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' }, '消灯': { text: '異常', alert: true } } },
+      'registration': { 'label': '登録', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話の設定中' }, '赤点灯': { text: 'ひかり電話の設定失敗（認証エラー）', alert: true }, '赤点滅': { text: 'ひかり電話の設定失敗（その他のエラー）', alert: true }, '消灯': { text: 'ひかり電話　未設定', alert: true } } },
+      'initialStatus': { 'label': '初期状態', 'options': { '橙点灯': { text: '工場出荷時状態または、ＯＮＵ機能のみ有効' }, '橙点滅': { text: 'ＩＰアドレスが重複している', alert: true }, '消灯': { text: '正常' } } },
+      'option': { 'label': 'オプション', 'options': { '緑点灯': { text: 'ＯＮＵ機能のみ利用可' }, '緑点滅': { text: '「無線ＬＡＮ簡単セットアップ」設定中または、内蔵無線ＬＡＮが５ＧＨｚ帯で動作中' }, '青点滅・点灯': { text: '３回点滅後、２秒点灯：ＵＳＢポートに機器が接続された' }, '消灯': { text: '内蔵無線ＬＡＮが無効' } } },
+      'auth': { 'label': '認証', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置運用準備中または装置故障', alert: true } } },
+      'uni': { 'label': 'ＵＮＩ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ＯＮＵ機能　データ通信中' }, '消灯': { text: 'ＯＮＵ機能　利用不可', alert: true } } },
+      'hikariLine': { 'label': '光回線', 'options': { '緑点灯': { text: '正常' }, '橙点灯': { text: '装置運用準備中または装置故障', alert: true }, '橙点滅': { text: 'ＯＮＵ機能 ファームウェアダウンロード中' }, '消灯': { text: '未接続', alert: true } } },
+      'power': { 'label': '電源', 'options': { '緑点灯': { text: '正常' }, '赤点灯': { text: '故障', alert: true }, '赤点滅': { text: 'ＯＮＵ機能 ファームウェアダウンロード完了' }, '消灯': { text: '電源が切れている', alert: true } } },
+      'videoOutput': { 'label': '映像出力\n※[PR-600KI/GV-ONU]\nの場合のみ', 'options': { '緑点灯': { text: '映像サービス 利用可' }, '赤点灯': { text: '故障', alert: true }, '消灯': { text: '映像サービス 利用不可' } } }
     },
-    'lampStatusOnu': {
-      'auth': {
-        'label': '認証\n(AUTH)',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '消灯': { text: '装置運用準備中または故障発生状態', alert: true }
-        }
-      },
-      'uni': {
-        'label': 'ＵＮＩ',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '緑点滅': { text: '正常（通信中）' },
-          '消灯': { text: '端末機器（ひかり電話ルータ・市販無線ルータ等）とのリンクが確立されていません➡配線の抜けや緩みの確認方法をご確認ください', alert: true }
-        }
-      },
-      'hikariLine': {
-        'label': '光回線\n(PON/TEST)',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '橙点灯': { text: '装置運用準備中または故障発生状態', alert: true },
-          '橙点滅': { text: 'ソフトウェアのダウンロード中のため、しばらくそのままお待ちください。' },
-          '消灯': { text: '光の信号が届いていない可能性があります➡NTT製機器の光回線ランプが消灯しているをご確認ください', alert: true }
-        }
-      },
-      'power': {
-        'label': '電源\n(POWER)',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '赤点灯': { text: '装置故障状態。ランプ状態が変わらない場合は電源の入れ直しをお願いいたします。', alert: true },
-          '赤点滅': { text: 'ソフトウェアのダウンロード中もしくはダウンロード完了状態のため、自動的に再起動されるのをお待ちください。' },
-          '消灯': { text: '装置の電源が入っておりません', alert: true }
-        }
-      }
-    },
-    'lampStatusSmallOnu': {
-      'smallOnuStatus': {
-        'label': 'ランプ状態\n(上下2つの組み合わせ)',
-        'options': {
-          '上：緑 / 下：緑': { text: '正常（電源が入っており、光回線・認証も問題ありません）' },
-          '上：赤 / 下：消灯': { text: '光信号が届いていません。光コンセントからのケーブルが緩んでいないか確認してください。', alert: true },
-          '上：赤 / 下：緑': { text: '未認証またはMACアドレス相違。', alert: true },
-          '上：赤 / 下：赤': { text: '機器の故障。', alert: true }
-        }
-      }
-    },
-    'lampStatusVdsl': {
-      'power': {
-        'label': '電源\n(POWER)',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '消灯': { text: '装置の電源が入っていません。電源アダプタの抜けがないか確認してください。', alert: true }
-        }
-      },
-      'vdsl': {
-        'label': 'VDSL\n(LINE)',
-        'options': {
-          '緑点灯': { text: '正常（VDSL回線が確立しています）' },
-          '緑点滅': { text: '同期中・接続確立の準備中です。点灯に変わるまでお待ちください。' },
-          '消灯': { text: 'VDSL回線が不確立です。モジュラージャック（壁の差し込み口）の配線が抜けていないか確認してください。', alert: true }
-        }
-      },
-      'lan': {
-        'label': 'LAN\n(PC)',
-        'options': {
-          '緑点灯': { text: '正常' },
-          '緑点滅': { text: '正常（通信中）' },
-          '消灯': { text: 'ルーターやPCなどの端末機器とのリンクが確立されていません。LANケーブルを確認してください。', alert: true }
-        }
-      },
-      'alarm': {
-        'label': 'アラーム\n(FAIL)',
-        'options': {
-          '赤点灯': { text: '装置故障状態。モデムの電源を入れ直しても改善しない場合は機器交換の可能性があります。', alert: true },
-          '消灯': { text: '正常' }
-        }
-      }
+    // XG/RX最新シリーズ共通パターン（色＋状態）
+    xgStyle: {
+      'power': { 'label': '電源', 'options': { '緑色 点灯': { text: '電源が入っている' }, '消灯': { text: '電源が入っていない', alert: true } } },
+      'alarm': { 'label': 'アラーム', 'options': { '赤色 点灯': { text: '障害状態', alert: true }, '赤色 点滅': { text: 'ソフトウェアの一時的異常', alert: true }, '赤色 点滅(10秒間)': { text: 'USBポート異常', alert: true }, '消灯': { text: '正常' } } },
+      'data': { 'label': 'データ通信', 'options': { '青色 点灯': { text: 'ＤＳ－ＬｉｔｅまたはＭＡＰ－Ｅのインターネット利用可能' }, '緑色 点灯': { text: '１セッション接続中　ＰＰＰのインターネット利用可能' }, '橙色 点灯': { text: '２セッション以上接続中　ＰＰＰのインターネット利用可能' }, '水色 点灯': { text: 'ＤＳ－ＬｉｔｅとＰＰＰ併用でのインターネット利用可能' }, '消灯': { text: 'オフライン状態' } } },
+      'tel': { 'label': '電話', 'options': { '緑色 点灯': { text: 'ひかり電話利用可能' }, '緑色 点滅': { text: 'ひかり電話で通話中/着信中/呼び出し中' }, '消灯': { text: 'ひかり電話利用不可', alert: true } } },
+      'act': { 'label': 'ＡＣＴ', 'options': { '緑色 点灯': { text: 'ひかり電話/ルータ機能利用可能' }, '緑色 点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' }, '消灯': { text: 'ひかり電話/ルータ機能利用不可', alert: true } } },
+      'registration': { 'label': '登録', 'options': { '緑色 点灯': { text: 'ネットワークから設定情報取得済' }, '緑色 点滅': { text: 'ネットワークから設定情報取得中' }, '赤色 点灯': { text: '将来拡張用' }, '赤色 点滅': { text: 'ネットワークから設定情報取得に失敗（その他認証エラー）', alert: true }, '消灯': { text: 'ネットワークから設定情報未取得' } } },
+      'initialStatus': { 'label': '初期状態', 'options': { '橙色 点灯': { text: '工場出荷状態（初期化状態）' }, '橙色 点滅': { text: 'ＩＰｖ４アドレスが重複', alert: true }, '消灯': { text: '通常状態' } } },
+      'option': { 'label': 'オプション', 'options': { '緑色 点灯': { text: 'ひかり電話/ルータ機能利用不可', alert: true }, '橙色 点灯': { text: 'アダプタモード動作中' }, '水色 ３回点滅 → ２秒点灯': { text: 'USBポートへの機器接続' }, '消灯': { text: '通常状態' } } }
     }
   };
 
-  // === フォーム動的生成ロジック ===
+  // HTMLの表示ID（lampStatusXXX）に対応させるマスタデータ
+  const descriptions = {
+    'lampStatusHgw': patterns.hgwStandard,
+    'lampStatusPr600': patterns.hgwStandard,
+    'lampStatusPr500': patterns.hgwStandard,
+    'lampStatusPr400': patterns.hgwStandard,
+    'lampStatusRt500': patterns.hgwStandard,
+    'lampStatusRt400': patterns.hgwStandard,
+    'lampStatusRv440': patterns.hgwStandard,
+    'lampStatusPrS300': patterns.hgwStandard,
+    'lampStatusRtS300': patterns.hgwStandard,
+    'lampStatusRvS340': patterns.hgwStandard,
+    'lampStatusXg200': patterns.xgStyle,
+    'lampStatusXg100': patterns.xgStyle,
+    'lampStatusRx601': patterns.xgStyle,
+    'lampStatusRx600': patterns.xgStyle,
+    
+    // 単体ONU
+    'lampStatusOnu': {
+      'auth': { 'label': '認証\n(AUTH)', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置運用準備中または故障発生状態', alert: true } } },
+      'uni': { 'label': 'ＵＮＩ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '正常（通信中）' }, '消灯': { text: '端末機器とのリンク未確立', alert: true } } },
+      'hikariLine': { 'label': '光回線\n(PON/TEST)', 'options': { '緑点灯': { text: '正常' }, '橙点灯': { text: '装置運用準備中または故障発生状態', alert: true }, '橙点滅': { text: 'ソフトウェアダウンロード中' }, '消灯': { text: '光の信号が届いていない可能性', alert: true } } },
+      'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '赤点灯': { text: '装置故障状態。', alert: true }, '赤点滅': { text: 'ダウンロード中もしくはダウンロード完了状態' }, '消灯': { text: '装置の電源が入っておりません', alert: true } } }
+    },
+    // 小型ONU
+    'lampStatusSmallOnu': {
+      'smallOnuStatus': { 'label': 'ランプ状態\n(上下2つの組み合わせ)', 'options': { '上：緑 / 下：緑': { text: '正常' }, '上：赤 / 下：消灯': { text: '光信号未到達。ケーブル緩み確認。', alert: true }, '上：赤 / 下：緑': { text: '未認証またはMACアドレス相違。', alert: true }, '上：赤 / 下：赤': { text: '機器の故障。', alert: true } } }
+    },
+    // VDSL
+    'lampStatusVdsl': {
+      'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置の電源が入っていません。', alert: true } } },
+      'vdsl': { 'label': 'VDSL\n(LINE)', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '同期中・接続確立の準備中。', alert: false }, '消灯': { text: 'VDSL回線不確立。', alert: true } } },
+      'lan': { 'label': 'LAN\n(PC)', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '正常（通信中）' }, '消灯': { text: '端末機器とのリンク未確立。', alert: true } } },
+      'alarm': { 'label': 'アラーム\n(FAIL)', 'options': { '赤点灯': { text: '装置故障状態。', alert: true }, '消灯': { text: '正常' } } }
+    }
+  };
+  // 表示が有効になっているランプエリアのIDを管理する変数
+  let activeOnuVdslContainerId = '';
+  let activeHgwContainerId = '';
+
+  // フォーム動的生成ロジック
   function renderDeviceForms(deviceId) {
     const container = document.getElementById(deviceId);
     if (!container) return;
 
     container.innerHTML = '';
-
     const deviceData = descriptions[deviceId];
     if (!deviceData) return;
 
     Object.keys(deviceData).forEach(selectId => {
       const item = deviceData[selectId];
-      
       const row = document.createElement('div');
       row.className = 'row-container';
 
@@ -299,8 +304,6 @@
       select.addEventListener('change', (e) => {
         const selectedValue = e.target.value;
         span.classList.remove('alert');
-        
-        // ユーザーが選択を変更したら「コピーしました」を非表示にする
         document.getElementById('copyMsg').style.display = 'none';
 
         if (selectedValue && item.options[selectedValue]) {
@@ -324,55 +327,184 @@
     });
   }
 
+  // 自動表示切り替えロジック
+  function autoToggleLampArea() {
+    document.getElementById('copyMsg').style.display = 'none';
+    
+    const onuVdslVal = document.getElementById('onuVdslSelect').value;
+    const hgwTypeVal = document.getElementById('hgwTypeSelect').value;
+
+    // 1. ONU/VDSL側のランプエリア制御
+    let targetOnuVdslId = '';
+    if (onuVdslVal) {
+      if (onuVdslVal === '小型ONU') {
+        targetOnuVdslId = 'lampStatusSmallOnu';
+      } else if (onuVdslVal.includes('VH-100') || onuVdslVal.includes('VDSL')) {
+        targetOnuVdslId = 'lampStatusVdsl';
+      } else {
+        targetOnuVdslId = 'lampStatusOnu';
+      }
+    }
+
+    if (targetOnuVdslId !== activeOnuVdslContainerId) {
+      ['lampStatusOnu', 'lampStatusSmallOnu', 'lampStatusVdsl'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.style.display = 'none'; el.innerHTML = ''; }
+      });
+      activeOnuVdslContainerId = targetOnuVdslId;
+      if (targetOnuVdslId) {
+        renderDeviceForms(targetOnuVdslId);
+        document.getElementById(targetOnuVdslId).style.display = 'flex';
+      }
+    }
+
+    // 2. HGW側のランプエリア制御
+    let targetHgwId = '';
+    if (hgwTypeVal) {
+      if (hgwTypeVal === 'XG-200') targetHgwId = 'lampStatusXg200';
+      else if (hgwTypeVal === 'XG-100') targetHgwId = 'lampStatusXg100';
+      else if (hgwTypeVal === 'RX-601') targetHgwId = 'lampStatusRx601';
+      else if (hgwTypeVal === 'RX-600') targetHgwId = 'lampStatusRx600';
+      else if (hgwTypeVal === 'PR-600') targetHgwId = 'lampStatusPr600';
+      else if (hgwTypeVal === 'PR-500') targetHgwId = 'lampStatusPr500';
+      else if (hgwTypeVal === 'PR-400') targetHgwId = 'lampStatusPr400';
+      else if (hgwTypeVal === 'RT-500') targetHgwId = 'lampStatusRt500';
+      else if (hgwTypeVal === 'RT-400') targetHgwId = 'lampStatusRt400';
+      else if (hgwTypeVal === 'RV-440') targetHgwId = 'lampStatusRv440';
+      else if (hgwTypeVal === 'PR-S300') targetHgwId = 'lampStatusPrS300';
+      else if (hgwTypeVal === 'RT-S300') targetHgwId = 'lampStatusRtS300';
+      else if (hgwTypeVal === 'RV-S340') targetHgwId = 'lampStatusRvS340';
+      else targetHgwId = 'lampStatusHgw';
+    }
+
+    if (targetHgwId !== activeHgwContainerId) {
+      ['lampStatusHgw', 'lampStatusXg200', 'lampStatusXg100', 'lampStatusRx601', 'lampStatusRx600', 'lampStatusPr600', 'lampStatusPr500', 'lampStatusPr400', 'lampStatusRt500', 'lampStatusRt400', 'lampStatusRv440', 'lampStatusPrS300', 'lampStatusRtS300', 'lampStatusRvS340'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.style.display = 'none'; el.innerHTML = ''; }
+      });
+      activeHgwContainerId = targetHgwId;
+      if (targetHgwId) {
+        renderDeviceForms(targetHgwId);
+        document.getElementById(targetHgwId).style.display = 'flex';
+      }
+    }
+  }
+
+  // プルダウンのイベント登録
+  ['onuVdslSelect', 'hgwTypeSelect', 'hgwGenerationSelect', 'hgwMakerSelect'].forEach(id => {
+    document.getElementById(id).addEventListener('change', autoToggleLampArea);
+  });
+
+  // すべてクリア
   function resetForm() {
-    document.getElementById('onuSelect').value = '';
+    document.getElementById('onuVdslSelect').value = '';
+    document.getElementById('hgwTypeSelect').value = '';
+    document.getElementById('hgwGenerationSelect').value = '';
+    document.getElementById('hgwMakerSelect').value = '';
+    document.getElementById('powerReset').checked = false;
+    document.getElementById('cableReset').checked = false;
+    
     document.querySelectorAll('.lampStatus').forEach(el => {
       el.style.display = 'none';
       el.innerHTML = '';
     });
+    activeOnuVdslContainerId = '';
+    activeHgwContainerId = '';
     document.getElementById('copyMsg').style.display = 'none';
   }
 
-  // 機器タイプ変更イベント
-  document.getElementById('onuSelect').addEventListener('change', (e) => {
-    document.querySelectorAll('.lampStatus').forEach(el => {
-      el.style.display = 'none';
-      el.innerHTML = '';
-    });
-    document.getElementById('copyMsg').style.display = 'none';
-
-    const deviceId = e.target.value;
-    if (deviceId) {
-      renderDeviceForms(deviceId);
-      const target = document.getElementById(deviceId);
-      if (target) target.style.display = 'flex';
-    }
-  });
-
   // コピー機能
   document.getElementById('copyBtn').addEventListener('click', () => {
-    const onuSelect = document.getElementById('onuSelect');
-    const selectedDeviceText = onuSelect.options[onuSelect.selectedIndex].text;
-    
-    if (!onuSelect.value) {
-      alert('ONUタイプを選択してください。');
+    const onuVdslVal = document.getElementById('onuVdslSelect').value;
+    const hgwTypeVal = document.getElementById('hgwTypeSelect').value;
+    const hgwGenVal = document.getElementById('hgwGenerationSelect').value;
+    const hgwMakerVal = document.getElementById('hgwMakerSelect').value;
+
+    if (!activeOnuVdslContainerId && !activeHgwContainerId) {
+      alert('機器情報を選択してください。');
       return;
     }
 
-    let copyText = `【機器タイプ】: ${selectedDeviceText}\n`;
-    const activeContainer = document.getElementById(onuSelect.value);
-    const rows = activeContainer.querySelectorAll('.row-container');
+    const powerChecked = document.getElementById('powerReset').checked ? '実施済み' : '未実施';
+    const cableChecked = document.getElementById('cableReset').checked ? '実施済み' : '未実施';
+
+    // 機器タイプの分類テキスト
+    let deviceTypeText = '';
+    if (activeHgwContainerId && activeOnuVdslContainerId) {
+      deviceTypeText = 'ONU/VDSL + HGW';
+    } else if (activeHgwContainerId) {
+      deviceTypeText = 'HGW（ホームゲートウェイ）';
+    } else if (activeOnuVdslContainerId === 'lampStatusSmallOnu') {
+      deviceTypeText = '小型ONU（スティック型）';
+    } else if (activeOnuVdslContainerId === 'lampStatusVdsl') {
+      deviceTypeText = 'VDSLモデム';
+    } else {
+      deviceTypeText = 'ONU（光回線終端装置）';
+    }
+
+    // 基本ログヘッダーの組み立て
+    let copyText = `【対応状況】\n`;
+    copyText += `・電源入れ直し: ${powerChecked}\n`;
+    copyText += `・ケーブル入れ直し: ${cableChecked}\n\n`;
+    copyText += `【機器タイプ】: ${deviceTypeText}\n\n`;
     
     let hasInput = false;
-    rows.forEach(row => {
-      const labelText = row.querySelector('label').textContent.replace(/\n/g, ' ');
-      const select = row.querySelector('select');
-      
-      if (select.value) {
-        hasInput = true;
-        copyText += `・${labelText}: ${select.value}\n`;
+
+    // 1. ONU/VDSL側のランプ情報の収集
+    if (activeOnuVdslContainerId) {
+      const container = document.getElementById(activeOnuVdslContainerId);
+      const rows = container.querySelectorAll('.row-container');
+      let sectionText = `[ ${onuVdslVal || 'ONU/VDSL'} ]\n`;
+      let subInput = false;
+
+      rows.forEach(row => {
+        const labelText = row.querySelector('label').textContent.replace(/\n/g, ' ');
+        const select = row.querySelector('select');
+        if (select.value) {
+          subInput = true;
+          hasInput = true;
+          sectionText += `・${labelText}: ${select.value}\n`;
+        }
+      });
+
+      if (subInput) {
+        copyText += sectionText + `\n`;
       }
-    });
+    }
+
+    // 2. HGW側のランプ情報の収集と型式生成
+    if (activeHgwContainerId) {
+      let combinedHgwName = hgwTypeVal || 'HGW';
+      if (hgwTypeVal && (hgwGenVal || hgwMakerVal)) {
+        if (hgwTypeVal.includes(hgwGenVal)) {
+          combinedHgwName = `${hgwTypeVal}${hgwMakerVal}`;
+        } else {
+          combinedHgwName = `${hgwTypeVal}${hgwGenVal}${hgwMakerVal}`;
+        }
+      }
+
+      const container = document.getElementById(activeHgwContainerId);
+      const rows = container.querySelectorAll('.row-container');
+      let sectionText = `[ ${combinedHgwName} ]\n`;
+      let subInput = false;
+
+      rows.forEach(row => {
+        const labelText = row.querySelector('label').textContent.replace(/\n/g, ' ');
+        const select = row.querySelector('select');
+        if (select.value) {
+          subInput = true;
+          hasInput = true;
+          sectionText += `・${labelText}: ${select.value}\n`;
+        }
+      });
+
+      if (subInput) {
+        copyText += sectionText;
+      }
+    }
+
+    // 末尾の余分な改行を削除して調整
+    copyText = copyText.trim();
 
     if (!hasInput) {
       alert('ランプ状態を1つ以上選択してください。');
@@ -380,12 +512,18 @@
     }
 
     navigator.clipboard.writeText(copyText).then(() => {
-      // ずっと表示を維持するためsetTimeoutを削除
       const msg = document.getElementById('copyMsg');
       msg.style.display = 'inline';
     }).catch(err => {
       alert('コピーに失敗しました: ' + err);
     });
+  });
+
+  document.getElementById('powerReset').addEventListener('change', () => {
+    document.getElementById('copyMsg').style.display = 'none';
+  });
+  document.getElementById('cableReset').addEventListener('change', () => {
+    document.getElementById('copyMsg').style.display = 'none';
   });
 
   document.getElementById('clearBtn').addEventListener('click', resetForm);

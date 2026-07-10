@@ -2,18 +2,29 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>機器ランプ状態</title>
+  <title>機器ランプ状態確認ツール</title>
   <style>
+    body {
+      font-family: 'Segoe UI', Meiryo, sans-serif;
+      margin: 20px;
+      color: #333;
+      background-color: #fcfcfc;
+    }
     th {
       text-align: left;
       font-weight: normal;
       padding-right: 10px;
+      font-size: 14px;
     }
     .lampStatus {
       display: flex;
       flex-direction: column;
       gap: 15px;
       margin-top: 15px;
+      padding: 15px;
+      background-color: #fafafa;
+      border: 1px dashed #ccc;
+      border-radius: 6px;
     }
     .row-container {
       display: inline-flex;
@@ -31,6 +42,7 @@
       padding: 4px;
       font-size: 14px;
       margin-top: -2px;
+      width: 240px;
     }
     .side-description {
       padding: 6px 12px;
@@ -39,6 +51,8 @@
       font-size: 14px;
       border-radius: 4px;
       line-height: 1.4;
+      min-width: 350px;
+      max-width: 600px;
     }
     .side-description.alert {
       background-color: #fff0f0;
@@ -69,12 +83,33 @@
       font-weight: bold;
       margin-top: 15px;
       margin-bottom: 5px;
+      background-color: #e9ecef;
+      padding: 4px 8px;
+      border-radius: 4px;
     }
     .device-selector-area select {
       margin-bottom: 8px;
       padding: 4px;
       font-size: 14px;
       width: 350px;
+    }
+    button {
+      padding: 6px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #clearBtn {
+      background-color: #6c757d;
+      color: white;
+      border: 1px solid #5a6268;
+      border-radius: 4px;
+    }
+    #copyBtn {
+      background-color: #28a745;
+      color: white;
+      border: 1px solid #218838;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -102,11 +137,11 @@
     </tr>
   </table>
 </div>
-<br>
 
 <div class="section-title">【機器情報】</div>
 <div class="device-selector-area">
-  【ONU,VDSL選択】<br>
+【ONU,VDSL選択】<br>
+※ルーター機能なし、有線でPC１台接続可能、wifi mode=RT<br>
   <select id="onuVdslSelect">
     <option value="">--ONU,VDSLを選択してください--</option>
     <option value="GE-ONU">GE-ONU（一般型）</option>
@@ -127,7 +162,8 @@
 <div id="lampStatusVdsl" class="lampStatus" style="display: none;"></div>
 <br>
 
-  【HGW型式選択】<br>
+【HGW型式選択】<br>
+※ルーター機能あり、wifi mode=AP<br>
   <select id="hgwTypeSelect">
     <option value="">--HGWの型式を選択してください--</option>
     <option value="PR-600">「PR-600」HGW(最新10G対応/ONU・映像一体型)</option>
@@ -137,16 +173,16 @@
     <option value="PR-">「PR-」HGW(従来型ONU一体型/無線LANカード対応)</option>
     <option value="RS-">「RS-」HGW(小型ONU対応/無線LAN機能内蔵型)</option>
     <option value="RT-500">「RT-500」HGW(無線対応単体型)</option>
-    <option value="RT-400">「RT-400」HGW(従来型単体型)</option>
+    <option value="RT-400">「RT-400`」HGW(従来型単体型)</option>
     <option value="RT-S300">「RT-S300」HGW(300号世代単体型)</option>
-    <option value="RT-">「RT-」HGW(従来型単体型/無線LANカード対応)</option>
+    <option value="RT-">Han「RT-」HGW(従来型単体型/無線LANカード対応)</option>
     <option value="RV-440">「RV-440」HGW(VDSL一体型)</option>
     <option value="RV-S340">「RV-S340」HGW(340号世代VDSL一体型)</option>
     <option value="RV-">「RV-」HGW(VDSL一体型/従来型)</option>
     <option value="RX-601">「RX-601」HGW(最新10G/無線内蔵型)</option>
     <option value="RX-600">「RX-600」HGW(最新10G対応/従来型単体型)</option>
     <option value="RX-">「RX-」HGW(従来型単体型)</option>
-    <option value="XG-200">「XG-200」HGW(フレッツ光クロス対応)</option>
+    <option value="XG-200">「XG-200`」HGW(フレッツ光クロス対応)</option>
     <option value="XG-100">「XG-100」HGW(フレッツ光クロス対応)</option>
   </select>
   <br>
@@ -196,11 +232,37 @@
 <div id="lampStatusPrS300" class="lampStatus" style="display: none;"></div>
 <div id="lampStatusRtS300" class="lampStatus" style="display: none;"></div>
 <div id="lampStatusRvS340" class="lampStatus" style="display: none;"></div>
+<br>
+
+ルーターメーカー選択<br>
+<select id="routerMaker">
+	<option value="">--ルーターのメーカーを選択してください--</option>
+	<option value="buffalo">バッファロー (BUFFALO)</option>
+	<option value="nec">NEC (Aterm)</option>
+	<option value="elecom">エレコム (ELECOM)</option>
+	<option value="iodata">アイ・オー・データ (I-O DATA)</option>
+	<option value="tplink">TP-Link</option>
+	<option value="asus">ASUS (エイスース)</option>
+	<option value="cisco">シスコシステムズ (Cisco)</option>
+	<option value="yamaha">ヤマハ (YAMAHA)</option>
+	<option value="netgear">ネットギア (NETGEAR)</option>
+</select>
+<br>
+<br>
+wifi mode：
+<label><input type="radio" name="wifiModeRadio" value="RT" checked>RT</label>
+<label><input type="radio" name="wifiModeRadio" value="AP">AP</label>
+<br>
+<br>
+セッション：
+<label><input type="radio" name="sessionRadio" value="なし" checked>なし</label>
+<label><input type="radio" name="sessionRadio" value="あり">あり</label>
 
 <script>
-  // 各機器タイプごとの基本ランプパターンを共通定義
+  // ==========================================
+  // 1. 各機器タイプごとの基本ランプパターン定義
+  // ==========================================
   const patterns = {
-    // 従来型の標準的なHGWパターン（PR-400, RV-440, RS, RT等で共通）
     hgwStandard: {
       'routerPowerSupply': { 'label': 'ルータ電源', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '電源が入っていない', alert: true } } },
       'alarm': { 'label': 'アラーム', 'options': { '赤点灯': { text: '装置障害', alert: true }, '赤点滅（最大１０秒）': { text: 'ＵＳＢポートの異常を検出', alert: true }, '消灯': { text: '正常' } } },
@@ -216,7 +278,6 @@
       'power': { 'label': '電源', 'options': { '緑点灯': { text: '正常' }, '赤点灯': { text: '故障', alert: true }, '赤点滅': { text: 'ＯＮＵ機能 ファームウェアダウンロード完了' }, '消灯': { text: '電源が切れている', alert: true } } },
       'videoOutput': { 'label': '映像出力\n※[PR-600KI/GV-ONU]\nの場合のみ', 'options': { '緑点灯': { text: '映像サービス 利用可' }, '赤点灯': { text: '故障', alert: true }, '消灯': { text: '映像サービス 利用不可' } } }
     },
-    // XG/RX最新シリーズ共通パターン（色＋状態）
     xgStyle: {
       'power': { 'label': '電源', 'options': { '緑色 点灯': { text: '電源が入っている' }, '消灯': { text: '電源が入っていない', alert: true } } },
       'alarm': { 'label': 'アラーム', 'options': { '赤色 点灯': { text: '障害状態', alert: true }, '赤色 点滅': { text: 'ソフトウェアの一時的異常', alert: true }, '赤色 点滅(10秒間)': { text: 'USBポート異常', alert: true }, '消灯': { text: '正常' } } },
@@ -229,7 +290,9 @@
     }
   };
 
-  // HTMLの表示ID（lampStatusXXX）に対応させるマスタデータ
+  // ==========================================
+  // 2. HTMLの表示IDに対応させるマスタデータ
+  // ==========================================
   const descriptions = {
     'lampStatusHgw': patterns.hgwStandard,
     'lampStatusPr600': patterns.hgwStandard,
@@ -246,18 +309,15 @@
     'lampStatusRx601': patterns.xgStyle,
     'lampStatusRx600': patterns.xgStyle,
     
-    // 単体ONU
     'lampStatusOnu': {
       'auth': { 'label': '認証\n(AUTH)', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置運用準備中または故障発生状態', alert: true } } },
       'uni': { 'label': 'ＵＮＩ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '正常（通信中）' }, '消灯': { text: '端末機器とのリンク未確立', alert: true } } },
       'hikariLine': { 'label': '光回線\n(PON/TEST)', 'options': { '緑点灯': { text: '正常' }, '橙点灯': { text: '装置運用準備中または故障発生状態', alert: true }, '橙点滅': { text: 'ソフトウェアダウンロード中' }, '消灯': { text: '光の信号が届いていない可能性', alert: true } } },
       'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '赤点灯': { text: '装置故障状態。', alert: true }, '赤点滅': { text: 'ダウンロード中もしくはダウンロード完了状態' }, '消灯': { text: '装置の電源が入っておりません', alert: true } } }
     },
-    // 小型ONU
     'lampStatusSmallOnu': {
       'smallOnuStatus': { 'label': 'ランプ状態\n(上下2つの組み合わせ)', 'options': { '上：緑 / 下：緑': { text: '正常' }, '上：赤 / 下：消灯': { text: '光信号未到達。ケーブル緩み確認。', alert: true }, '上：赤 / 下：緑': { text: '未認証またはMACアドレス相違。', alert: true }, '上：赤 / 下：赤': { text: '機器の故障。', alert: true } } }
     },
-    // VDSL
     'lampStatusVdsl': {
       'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置の電源が入っていません。', alert: true } } },
       'vdsl': { 'label': 'VDSL\n(LINE)', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '同期中・接続確立の準備中。', alert: false }, '消灯': { text: 'VDSL回線不確立。', alert: true } } },
@@ -265,11 +325,12 @@
       'alarm': { 'label': 'アラーム\n(FAIL)', 'options': { '赤点灯': { text: '装置故障状態。', alert: true }, '消灯': { text: '正常' } } }
     }
   };
-  // 表示が有効になっているランプエリアのIDを管理する変数
+  // ==========================================
+  // 3. グローバル変数 & フォーム生成ロジック
+  // ==========================================
   let activeOnuVdslContainerId = '';
   let activeHgwContainerId = '';
 
-  // フォーム動的生成ロジック
   function renderDeviceForms(deviceId) {
     const container = document.getElementById(deviceId);
     if (!container) return;
@@ -327,7 +388,9 @@
     });
   }
 
-  // 自動表示切り替えロジック
+  // ==========================================
+  // 4. 自動表示切り替えロジック
+  // ==========================================
   function autoToggleLampArea() {
     document.getElementById('copyMsg').style.display = 'none';
     
@@ -395,12 +458,17 @@
     document.getElementById(id).addEventListener('change', autoToggleLampArea);
   });
 
-  // すべてクリア
+  // ==========================================
+  // 5. ボタン系操作（クリア・コピー機能）
+  // ==========================================
+
+  // すべてクリア処理
   function resetForm() {
     document.getElementById('onuVdslSelect').value = '';
     document.getElementById('hgwTypeSelect').value = '';
     document.getElementById('hgwGenerationSelect').value = '';
     document.getElementById('hgwMakerSelect').value = '';
+    document.getElementById('routerMaker').value = '';
     document.getElementById('powerReset').checked = false;
     document.getElementById('cableReset').checked = false;
     
@@ -413,15 +481,22 @@
     document.getElementById('copyMsg').style.display = 'none';
   }
 
-  // コピー機能
+  // コピー機能とバリデーション
   document.getElementById('copyBtn').addEventListener('click', () => {
     const onuVdslVal = document.getElementById('onuVdslSelect').value;
     const hgwTypeVal = document.getElementById('hgwTypeSelect').value;
     const hgwGenVal = document.getElementById('hgwGenerationSelect').value;
     const hgwMakerVal = document.getElementById('hgwMakerSelect').value;
+    const routerMakerEl = document.getElementById('routerMaker');
+    const routerMakerVal = routerMakerEl.value;
+    
+    // 各ラジオボタンの選択値を取得
+    const wifiModeVal = document.querySelector('input[name="wifiModeRadio"]:checked').value;
+    const sessionVal = document.querySelector('input[name="sessionRadio"]:checked').value;
 
-    if (!activeOnuVdslContainerId && !activeHgwContainerId) {
-      alert('機器情報を選択してください。');
+    // 機器情報もルーターメーカーも選ばれていない場合のバリデーション
+    if (!activeOnuVdslContainerId && !activeHgwContainerId && !routerMakerVal) {
+      alert('機器情報またはルーターメーカーを選択してください。');
       return;
     }
 
@@ -438,11 +513,13 @@
       deviceTypeText = '小型ONU（スティック型）';
     } else if (activeOnuVdslContainerId === 'lampStatusVdsl') {
       deviceTypeText = 'VDSLモデム';
-    } else {
+    } else if (activeOnuVdslContainerId) {
       deviceTypeText = 'ONU（光回線終端装置）';
+    } else {
+      deviceTypeText = '単体ルーター構成';
     }
 
-    // 基本ログヘッダーの組み立て
+    // 1. 基本ログヘッダーの組み立て
     let copyText = `【対応状況】\n`;
     copyText += `・電源入れ直し: ${powerChecked}\n`;
     copyText += `・ケーブル入れ直し: ${cableChecked}\n\n`;
@@ -450,7 +527,7 @@
     
     let hasInput = false;
 
-    // 1. ONU/VDSL側のランプ情報の収集
+    // 2. ONU/VDSL側のランプ情報の収集
     if (activeOnuVdslContainerId) {
       const container = document.getElementById(activeOnuVdslContainerId);
       const rows = container.querySelectorAll('.row-container');
@@ -472,7 +549,7 @@
       }
     }
 
-    // 2. HGW側のランプ情報の収集と型式生成
+    // 3. HGW側のランプ情報の収集と型式生成
     if (activeHgwContainerId) {
       let combinedHgwName = hgwTypeVal || 'HGW';
       if (hgwTypeVal && (hgwGenVal || hgwMakerVal)) {
@@ -499,15 +576,26 @@
       });
 
       if (subInput) {
-        copyText += sectionText;
+        copyText += sectionText + `\n`;
       }
     }
 
-    // 末尾の余分な改行を削除して調整
-    copyText = copyText.trim();
+    // 4. 末尾にルーターメーカーの情報を追記
+    if (routerMakerVal) {
+      const routerMakerText = routerMakerEl.options[routerMakerEl.selectedIndex].text;
+      copyText += `【ルーターメーカー】: ${routerMakerText}\n`;
+    }
 
-    if (!hasInput) {
-      alert('ランプ状態を1つ以上選択してください。');
+    // 5. 末尾にwifi modeとセッション情報を追記
+    copyText += `【wifi mode】: ${wifiModeVal}\n`;
+    copyText += `【セッション】: ${sessionVal}\n`;
+
+    // 末尾の余分な改行を削除して調整
+    // copyText = copyText.trim();
+
+    // バリデーションチェック
+    if (!hasInput && !routerMakerVal) {
+      alert('ランプ状態を1つ以上選択するか、ルーターメーカーを選択してください。');
       return;
     }
 
@@ -519,6 +607,26 @@
     });
   });
 
+  // 新設ラジオボタンのイベント登録
+  document.querySelectorAll('input[name="wifiModeRadio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.getElementById('copyMsg').style.display = 'none';
+    });
+  });
+
+  // ラジオボタン変更時にコピーメッセージを非表示にするイベントを追加
+  document.querySelectorAll('input[name="sessionRadio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.getElementById('copyMsg').style.display = 'none';
+    });
+  });
+
+  // ルーターメーカーのプルダウン変更時にコピーメッセージを非表示にするイベント
+  document.getElementById('routerMaker').addEventListener('change', () => {
+    document.getElementById('copyMsg').style.display = 'none';
+  });
+
+  // チェックボックス変更時にコピーメッセージを非表示
   document.getElementById('powerReset').addEventListener('change', () => {
     document.getElementById('copyMsg').style.display = 'none';
   });

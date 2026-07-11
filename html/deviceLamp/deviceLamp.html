@@ -293,31 +293,67 @@ wifi mode：
   // ==========================================
   // 2. HTMLの表示IDに対応させるマスタデータ
   // ==========================================
+  // ==========================================
+  // 2. HTMLの表示IDに対応させるマスタデータ
+  // ==========================================
   const descriptions = {
+    // 汎用・従来型HGWの共通パターン
     'lampStatusHgw': patterns.hgwStandard,
     'lampStatusPr600': patterns.hgwStandard,
     'lampStatusPr500': patterns.hgwStandard,
     'lampStatusPr400': patterns.hgwStandard,
     'lampStatusRt500': patterns.hgwStandard,
     'lampStatusRt400': patterns.hgwStandard,
-    'lampStatusRv440': patterns.hgwStandard,
     'lampStatusPrS300': patterns.hgwStandard,
     'lampStatusRtS300': patterns.hgwStandard,
-    'lampStatusRvS340': patterns.hgwStandard,
+    
+    // フレッツ光クロス対応・最新ルーター（10G仕様）
     'lampStatusXg200': patterns.xgStyle,
     'lampStatusXg100': patterns.xgStyle,
     'lampStatusRx601': patterns.xgStyle,
     'lampStatusRx600': patterns.xgStyle,
     
+    // RV-440：VDSL一体型HGW（専用ランプパターン）
+    'lampStatusRv440': {
+      'routerPowerSupply': { 'label': 'ルータ電源', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '電源が入っていない', alert: true } } },
+      'alarm': { 'label': 'アラーム', 'options': { '赤点灯': { text: '装置障害', alert: true }, '赤点滅（最大１０秒）': { text: 'ＵＳＢポートの異常を検出', alert: true }, '赤点滅(10秒間/無線LAN設定時)': { text: '無線LAN簡単セットアップ設定失敗', alert: true }, '消灯': { text: '正常' } } },
+      'ppp': { 'label': 'ＰＰＰ', 'options': { '緑点灯': { text: '接続中' }, '橙点灯': { text: '２セッション以上接続中' }, '消灯': { text: '未接続', alert: true } } },
+      'hikariTel': { 'label': 'ひかり電話', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話　通話中／着信中／呼び出し中' }, '消灯': { text: '異常', alert: true } } },
+      'act': { 'label': 'ＡＣＴ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' }, '消灯': { text: '異常', alert: true } } },
+      'registration': { 'label': '登録', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話の設定中 / 無線LAN設定準備中' }, '橙点滅(無線LAN設定時)': { text: '無線LAN簡単セットアップ通信中' }, '橙点灯(10秒間/無線LAN設定時)': { text: '無線LAN簡単セットアップ設定完了' }, '赤点灯': { text: 'ひかり電話の設定失敗（認証エラー）', alert: true }, '赤点滅': { text: 'ひかり電話の設定失敗（その他のエラー）', alert: true }, '消灯': { text: 'ひかり電話　未設定', alert: true } } },
+      'initialStatus': { 'label': '初期状態', 'options': { '橙点灯': { text: '工場出荷時状態' }, '橙点滅': { text: 'ＩＰアドレスが重複している', alert: true }, '消灯': { text: '正常' } } },
+      'option': { 'label': 'オプション', 'options': { '青 ３回点滅後、２秒点灯': { text: 'ＵＳＢポートに機器が接続された' }, '消灯': { text: '正常' } } },
+      'vdsl': { 'label': 'ＶＤＳＬ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '回線トレーニング中および未接続', alert: false }, '消灯': { text: '接続動作停止中または装置故障', alert: true } } },
+      'fail': { 'label': 'ＦＡＩＬ', 'options': { '赤点灯': { text: '装置障害', alert: true }, '消灯': { text: '正常' } } }
+    },
+
+    // RV-S340：第3世代 VDSL一体型HGW（専用ランプパターン・オプションなし）
+    'lampStatusRvS340': {
+      'power': { 'label': '電源', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '電源が入っていない', alert: true } } },
+      'alarm': { 'label': 'アラーム', 'options': { '赤点灯': { text: '異常', alert: true }, '消灯': { text: '正常' } } },
+      'ppp': { 'label': 'ＰＰＰ', 'options': { '緑点灯': { text: '接続中' }, '橙点灯': { text: '２セッション以上接続中' }, '消灯': { text: '未接続', alert: true } } },
+      'hikariTel': { 'label': 'ひかり電話', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話　通話中／着信中／呼び出し中' }, '消灯': { text: 'ひかり電話が利用できない', alert: true } } },
+      'act': { 'label': 'ＡＣＴ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' }, '消灯': { text: 'ひかり電話/ルータ機能が利用できない', alert: true } } },
+      'registration': { 'label': '登録', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話の設定中' }, '赤点灯': { text: 'ひかり電話の設定失敗（認証エラー）', alert: true }, '赤点滅': { text: 'ひかり電話の設定失敗（その他のエラー）', alert: true }, '消灯': { text: 'ひかり電話の設定がされていない', alert: true } } },
+      'initialStatus': { 'label': '初期状態', 'options': { '橙点灯': { text: '工場出荷時状態' }, '橙点滅': { text: 'ＩＰアドレスが重複している', alert: true }, '消灯': { text: '正常' } } },
+      'vdsl': { 'label': 'ＶＤＳＬ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ＶＤＳＬ回線のトレーニング中および回線未接続', alert: false }, '消灯': { text: '停止中または障害', alert: true } } },
+      'fail': { 'label': 'ＦＡＩＬ', 'options': { '赤点灯': { text: '故障', alert: true }, '消灯': { text: '正常' } } }
+    },
+    
+    // 一般ONU（光回線終端装置）
     'lampStatusOnu': {
       'auth': { 'label': '認証\n(AUTH)', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置運用準備中または故障発生状態', alert: true } } },
       'uni': { 'label': 'ＵＮＩ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '正常（通信中）' }, '消灯': { text: '端末機器とのリンク未確立', alert: true } } },
       'hikariLine': { 'label': '光回線\n(PON/TEST)', 'options': { '緑点灯': { text: '正常' }, '橙点灯': { text: '装置運用準備中または故障発生状態', alert: true }, '橙点滅': { text: 'ソフトウェアダウンロード中' }, '消灯': { text: '光の信号が届いていない可能性', alert: true } } },
       'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '赤点灯': { text: '装置故障状態。', alert: true }, '赤点滅': { text: 'ダウンロード中もしくはダウンロード完了状態' }, '消灯': { text: '装置の電源が入っておりません', alert: true } } }
     },
+
+    // 小型ONU（スティック型）
     'lampStatusSmallOnu': {
       'smallOnuStatus': { 'label': 'ランプ状態\n(上下2つの組み合わせ)', 'options': { '上：緑 / 下：緑': { text: '正常' }, '上：赤 / 下：消灯': { text: '光信号未到達。ケーブル緩み確認。', alert: true }, '上：赤 / 下：緑': { text: '未認証またはMACアドレス相違。', alert: true }, '上：赤 / 下：赤': { text: '機器の故障。', alert: true } } }
     },
+
+    // 単体VDSLモデム
     'lampStatusVdsl': {
       'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置の電源が入っていません。', alert: true } } },
       'vdsl': { 'label': 'VDSL\n(LINE)', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '同期中・接続確立の準備中。', alert: false }, '消灯': { text: 'VDSL回線不確立。', alert: true } } },

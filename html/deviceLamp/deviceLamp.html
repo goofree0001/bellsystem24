@@ -173,7 +173,7 @@
     <option value="PR-">「PR-」HGW(従来型ONU一体型/無線LANカード対応)</option>
     <option value="RS-">「RS-」HGW(小型ONU対応/無線LAN機能内蔵型)</option>
     <option value="RT-500">「RT-500」HGW(無線対応単体型)</option>
-    <option value="RT-400">「RT-400`」HGW(従来型単体型)</option>
+    <option value="RT-400">「RT-400」HGW(従来型単体型)</option>
     <option value="RT-S300">「RT-S300」HGW(300号世代単体型)</option>
     <option value="RT-">Han「RT-」HGW(従来型単体型/無線LANカード対応)</option>
     <option value="RV-440">「RV-440」HGW(VDSL一体型)</option>
@@ -182,7 +182,7 @@
     <option value="RX-601">「RX-601」HGW(最新10G/無線内蔵型)</option>
     <option value="RX-600">「RX-600」HGW(最新10G対応/従来型単体型)</option>
     <option value="RX-">「RX-」HGW(従来型単体型)</option>
-    <option value="XG-200">「XG-200`」HGW(フレッツ光クロス対応)</option>
+    <option value="XG-200">「XG-200」HGW(フレッツ光クロス対応)</option>
     <option value="XG-100">「XG-100」HGW(フレッツ光クロス対応)</option>
   </select>
   <br>
@@ -293,30 +293,56 @@ wifi mode：
   // ==========================================
   // 2. HTMLの表示IDに対応させるマスタデータ
   // ==========================================
-  // ==========================================
-  // 2. HTMLの表示IDに対応させるマスタデータ
-  // ==========================================
   const descriptions = {
-    // 汎用・従来型HGWの共通パターン
+    // 汎用・従来型HGWの共通パターン（標準仕様）
     'lampStatusHgw': patterns.hgwStandard,
     'lampStatusPr600': patterns.hgwStandard,
     'lampStatusPr500': patterns.hgwStandard,
     'lampStatusPr400': patterns.hgwStandard,
+    'lampStatusPrS300': patterns.hgwStandard,
+    'lampStatusPr': patterns.hgwStandard,       // 「PR-」選択時の受け皿
+    'lampStatusRs': patterns.hgwStandard,       // 「RS-」選択時の受け皿
     'lampStatusRt500': patterns.hgwStandard,
     'lampStatusRt400': patterns.hgwStandard,
-    'lampStatusPrS300': patterns.hgwStandard,
     'lampStatusRtS300': patterns.hgwStandard,
+    'lampStatusRt': patterns.hgwStandard,       // 「RT-」選択時の受け皿
+    'lampStatusRv': patterns.hgwStandard,       // 「RV-」選択時の受け皿
+    'lampStatusRx': patterns.hgwStandard,       // 「RX-」選択時の受け皿
     
-    // フレッツ光クロス対応・最新ルーター（10G仕様）
-    'lampStatusXg200': patterns.xgStyle,
-    'lampStatusXg100': patterns.xgStyle,
+    // フレッツ光クロス対応・最新ルーター（10G仕様・マスタ個別化前の共通割り当て）
     'lampStatusRx601': patterns.xgStyle,
     'lampStatusRx600': patterns.xgStyle,
     
-    // RV-440：VDSL一体型HGW（専用ランプパターン）
+    // XG-200：最新10G対応HGW（専用ランプパターン・無線/MESHランプ追加）
+    'lampStatusXg200': {
+      'power': { 'label': '電源', 'options': { '緑色 点灯': { text: '電源が入っている' }, '消灯': { text: '電源が入っていない', alert: true } } },
+      'alarm': { 'label': 'アラーム', 'options': { '赤色 点灯': { text: '障害状態', alert: true }, '赤色 点滅': { text: 'ソフトウェアの一時的異常', alert: true }, '赤色 点滅(10秒間)': { text: 'USBポート異常', alert: true }, '消灯': { text: '正常' } } },
+      'data': { 'label': 'データ通信', 'options': { '青色 点灯': { text: 'ＤＳ－ＬｉｔｅまたはＭＡＰ－Ｅのインターネット利用可能' }, '緑色 点灯': { text: '１セッション接続中　ＰＰＰのインターネット利用可能' }, '橙色 点灯': { text: '２セッション以上接続中　ＰＰＰのインターネット利用可能' }, '水色 点灯': { text: 'ＤＳ－ＬｉｔｅとＰＰＰ併用でのインターネット利用可能' }, '消灯': { text: 'オフライン状態' } } },
+      'tel': { 'label': '電話', 'options': { '緑色 点灯': { text: 'ひかり電話利用可能' }, '緑色 点滅': { text: 'ひかり電話で通話中/着信中/呼び出し中' }, '消灯': { text: 'ひかり電話利用不可', alert: true } } },
+      'act': { 'label': 'ＡＣＴ', 'options': { '緑色 点灯': { text: 'ひかり電話/ルータ機能利用可能' }, '緑色 点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' }, '消灯': { text: 'ひかり電話/ルータ機能利用不可', alert: true } } },
+      'registration': { 'label': '登録', 'options': { '緑色 点灯': { text: 'ネットワークから設定情報取得済' }, '緑色 点滅': { text: 'ネットワークから設定情報取得中' }, '赤色 点灯': { text: '将来拡張用' }, '赤色 点滅': { text: 'ネットワークから設定情報取得に失敗（その他認証エラー）', alert: true }, '消灯': { text: 'ネットワークから設定情報未取得' } } },
+      'initialStatus': { 'label': '初期状態', 'options': { '橙色 点灯': { text: '工場出荷状態（初期化状態）' }, '橙色 点滅': { text: 'ＩＰｖ４アドレスが重複', alert: true }, '消灯': { text: '通常状態' } } },
+      'wireless': { 'label': '無線', 'options': { '青色 点滅': { text: '無線LAN（6GHz 帯/5GHz 帯/2.4GHz 帯）利用可能' }, '緑色 点滅': { text: '無線LAN（6GHz 帯/5GHz 帯/2.4GHz 帯）のいずれかの利用可能' }, '消灯': { text: '無線LAN利用不可' } } },
+      'mesh': { 'label': 'MESH', 'options': { '緑色 点灯': { text: 'メッシュ中継機帰属中' }, '消灯': { text: 'メッシュ中継機未帰属' } } },
+      'option': { 'label': 'オプション', 'options': { '緑色 点灯': { text: 'ひかり電話/ルータ機能利用不可', alert: true }, '橙色 点灯': { text: 'アダプタモード動作中' }, '水色 ３回点滅 → ２秒点灯': { text: 'USBポートへの機器接続' }, '消灯': { text: '通常状態' } } }
+    },
+
+    // XG-100：フレッツ光クロス対応HGW（専用ランプパターン・オプションランプが無線兼用仕様）
+    'lampStatusXg100': {
+      'power': { 'label': '電源', 'options': { '緑色 点灯': { text: '電源が入っている' }, '消灯': { text: '電源が入っていない', alert: true } } },
+      'alarm': { 'label': 'アラーム', 'options': { '赤色 点灯': { text: '障害状態', alert: true }, '消灯': { text: '正常' } } },
+      'data': { 'label': 'データ通信', 'options': { '青色 点灯': { text: 'ＤＳ－ＬｉｔｅまたはＭＡＰ－Ｅのインターネット利用可能' }, '緑色 点灯': { text: '１セッション接続中　ＰＰＰのインターネット利用可能' }, '橙色 点灯': { text: '２セッション以上接続中　ＰＰＰのインターネット利用可能' }, '水色 点灯': { text: 'ＤＳ－ＬｉｔｅとＰＰＰ併用でのインターネット利用可能' }, '消灯': { text: 'オフライン状態' } } },
+      'tel': { 'label': '電話', 'options': { '緑色 点灯': { text: 'ひかり電話利用可能' }, '緑色 点滅': { text: 'ひかり電話で通話中/着信中/呼び出し中' }, '消灯': { text: 'ひかり電話利用不可', alert: true } } },
+      'act': { 'label': 'ＡＣＴ', 'options': { '緑色 点灯': { text: 'ひかり電話/ルータ機能利用可能' }, '緑色 点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' }, '消灯': { text: 'ひかり電話/ルータ機能利用不可', alert: true } } },
+      'registration': { 'label': '登録', 'options': { '緑色 点灯': { text: 'ネットワークから設定情報取得済' }, '緑色 点滅': { text: 'ネットワークから設定情報取得中' }, '赤色 点灯': { text: '将来拡張用' }, '赤色 点滅': { text: 'ネットワークから設定情報取得に失敗（その他認証エラー）', alert: true }, '消灯': { text: 'ネットワークから設定情報未取得' } } },
+      'initialStatus': { 'label': '初期状態', 'options': { '橙色 点灯': { text: '工場出荷状態（初期化状態）' }, '橙色 点滅': { text: 'ＩＰｖ４アドレスが重複', alert: true }, '赤色 点灯': { text: '装置障害', alert: true }, '消灯': { text: '通常状態' } } },
+      'option': { 'label': 'オプション', 'options': { '緑色 点灯': { text: 'ルータ機能利用不可', alert: true }, '緑色 点滅': { text: '無線ＬＡＮ（５ＧＨｚ帯）が動作中' }, '桃色 点滅': { text: '無線ＬＡＮ（２．４ＧＨｚ帯）が動作中' }, '青色 点滅': { text: '無線ＬＡＮ（５ＧＨｚ帯／２．４ＧＨｚ帯）が動作中' }, '水色 ３回点滅 → ２秒点灯': { text: 'ＵＳＢポートに機器が接続／切断' }, '消灯': { text: '無線ＬＡＮ機能が無効' } } }
+    },
+    
+    // RV-440：VDSL一体型HGW（専用ランプパターン・無線セットアップ仕様内包）
     'lampStatusRv440': {
       'routerPowerSupply': { 'label': 'ルータ電源', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '電源が入っていない', alert: true } } },
-      'alarm': { 'label': 'アラーム', 'options': { '赤点灯': { text: '装置障害', alert: true }, '赤点滅（最大１０秒）': { text: 'ＵＳＢポートの異常を検出', alert: true }, '赤点滅(10秒間/無線LAN設定時)': { text: '無線LAN簡単セットアップ設定失敗', alert: true }, '消灯': { text: '正常' } } },
+      'alarm': { 'label': 'アラーム', 'options': { '赤点灯': { text: '装置障害', alert: true }, '赤点滅（最大１秒）': { text: 'ＵＳＢポートの異常を検出', alert: true }, '赤点滅(10秒間/無線LAN設定時)': { text: '無線LAN簡単セットアップ設定失敗', alert: true }, '消灯': { text: '正常' } } },
       'ppp': { 'label': 'ＰＰＰ', 'options': { '緑点灯': { text: '接続中' }, '橙点灯': { text: '２セッション以上接続中' }, '消灯': { text: '未接続', alert: true } } },
       'hikariTel': { 'label': 'ひかり電話', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話　通話中／着信中／呼び出し中' }, '消灯': { text: '異常', alert: true } } },
       'act': { 'label': 'ＡＣＴ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: 'ひかり電話/ルータ機能でデータ通信中' }, '消灯': { text: '異常', alert: true } } },

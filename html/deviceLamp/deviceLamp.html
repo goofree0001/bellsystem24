@@ -258,6 +258,20 @@ wifi mode：
 セッション：
 <label><input type="radio" name="sessionRadio" value="なし" checked>なし</label>
 <label><input type="radio" name="sessionRadio" value="あり">あり</label>
+<br>
+<br>
+解決方法：<br>
+<select id="solution">
+	<option value="">--解決方法を選択してください--</option>
+	<option value="HGWConnectionSettings">HGWに接続設定をして解決</option>
+	<option value="routerConnectionSettings">ルーターに接続設定をして解決</option>
+	<option value="introduceRouterMaker">ルーターメーカーをご案内</option>
+	<option value="introduceLineProvider">回線業者をご案内</option>
+	<option value="reportMalfunction">故障受付しました</option>
+	<option value="transmitV6Signal">V6の信号を送信しました</option>
+</select>
+<br>
+<br>
 
 <script>
   // ==========================================
@@ -573,6 +587,9 @@ wifi mode：
     const hgwMakerVal = document.getElementById('hgwMakerSelect').value;
     const routerMakerEl = document.getElementById('routerMaker');
     const routerMakerVal = routerMakerEl.value;
+    const solutionEl = document.getElementById('solution');
+    const solutionVal = solution.value;
+
     
     // 各ラジオボタンの選択値を取得
     const wifiModeVal = document.querySelector('input[name="wifiModeRadio"]:checked').value;
@@ -662,13 +679,13 @@ wifi mode：
       }
     }
 
-    // 4. 末尾にルーターメーカーの情報を追記
+    // 4. ルーターメーカーの情報を追記
     if (routerMakerVal) {
       const routerMakerText = routerMakerEl.options[routerMakerEl.selectedIndex].text;
       copyText += `【ルーターメーカー】: ${routerMakerText}\n`;
     }
 
-    // 5. 末尾にwifi modeとセッション情報を追記
+    // 5. wifi modeとセッション情報を追記
     copyText += `【wifi mode】: ${wifiModeVal}\n`;
     copyText += `\n`;
 
@@ -678,6 +695,13 @@ wifi mode：
     copyText += `\n`;
 
     copyText += `【セッション】: ${sessionVal}\n`;
+    copyText += `\n`;
+
+    // 5. 解決方法の情報を追記
+    if (solutionVal) {
+      const solutionText = solutionEl.options[solutionEl.selectedIndex].text;
+      copyText += `【解決方法】: ${solutionText}\n`;
+    }
 
     // 末尾の余分な改行を削除して調整
     // copyText = copyText.trim();

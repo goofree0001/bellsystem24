@@ -116,8 +116,6 @@
 <body>
 
 <button id="clearBtn" type="button">すべてクリア</button>
-<button id="copyBtn" type="button">内容をコピー</button>
-<span id="copyMsg" class="copy-message">コピーしました！</span>
 <br><br>
 
 <div class="section-title">【対応状況】</div>
@@ -272,6 +270,8 @@ wifi mode：
 </select>
 <br>
 <br>
+<button id="copyBtn" type="button">内容をコピー</button>
+<span id="copyMsg" class="copy-message">コピーしました！</span>
 
 <script>
   // ==========================================
@@ -698,10 +698,11 @@ wifi mode：
     copyText += `\n`;
 
     // 5. 解決方法の情報を追記
+    const solutionText = '';
     if (solutionVal) {
-      const solutionText = solutionEl.options[solutionEl.selectedIndex].text;
-      copyText += `【解決方法】: ${solutionText}\n`;
+      solutionText = solutionEl.options[solutionEl.selectedIndex].text;
     }
+    copyText += `【解決方法】: ${solutionText}\n`;
 
     // 末尾の余分な改行を削除して調整
     // copyText = copyText.trim();
@@ -715,6 +716,11 @@ wifi mode：
     navigator.clipboard.writeText(copyText).then(() => {
       const msg = document.getElementById('copyMsg');
       msg.style.display = 'inline';
+        // 2秒後にメッセージを自動で非表示にする
+		setTimeout(() => {
+		  msg.style.display = 'none';
+		}, 2000); 
+    
     }).catch(err => {
       alert('コピーに失敗しました: ' + err);
     });

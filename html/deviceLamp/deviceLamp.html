@@ -562,13 +562,14 @@ wifi mode：
 
   // すべてクリア処理
   function resetForm() {
+    document.getElementById('powerReset').checked = false;
+    document.getElementById('cableReset').checked = false;
     document.getElementById('onuVdslSelect').value = '';
     document.getElementById('hgwTypeSelect').value = '';
     document.getElementById('hgwGenerationSelect').value = '';
     document.getElementById('hgwMakerSelect').value = '';
     document.getElementById('routerMaker').value = '';
-    document.getElementById('powerReset').checked = false;
-    document.getElementById('cableReset').checked = false;
+    document.getElementById('solution').value = '';
     
     document.querySelectorAll('.lampStatus').forEach(el => {
       el.style.display = 'none';

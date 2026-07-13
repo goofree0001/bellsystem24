@@ -604,9 +604,7 @@ wifi mode：
     }
 
     // 1. 基本ログヘッダーの組み立て
-    let copyText = `【対応状況】\n`;
-    copyText += `・電源入れ直し: ${powerChecked}\n`;
-    copyText += `・ケーブル入れ直し: ${cableChecked}\n\n`;
+    let copyText = '';
     copyText += `【機器タイプ】: ${deviceTypeText}\n\n`;
     
     let hasInput = false;
@@ -672,6 +670,13 @@ wifi mode：
 
     // 5. 末尾にwifi modeとセッション情報を追記
     copyText += `【wifi mode】: ${wifiModeVal}\n`;
+    copyText += `\n`;
+
+    copyText += `【対応状況】\n`;
+    copyText += `・電源入れ直し: ${powerChecked}\n`;
+    copyText += `・ケーブル入れ直し: ${cableChecked}\n`;
+    copyText += `\n`;
+
     copyText += `【セッション】: ${sessionVal}\n`;
 
     // 末尾の余分な改行を削除して調整

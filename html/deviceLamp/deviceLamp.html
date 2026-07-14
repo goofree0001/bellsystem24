@@ -258,6 +258,16 @@ wifi mode：
 <label><input type="radio" name="sessionRadio" value="あり">あり</label>
 <br>
 <br>
+
+エスカレ：
+<input type="checkbox" name="escalationName">菊池</input>
+<input type="checkbox" name="escalationName">広鰭</input>
+<input type="checkbox" name="escalationName">堂藤</input>
+<input type="checkbox" name="escalationName">矢田</input>
+<input type="checkbox" name="escalationName">内山</input>
+<br>
+<br>
+
 解決方法：<br>
 <select id="solution">
 	<option value="">--解決方法を選択してください--</option>
@@ -569,6 +579,9 @@ wifi mode：
     document.getElementById('hgwGenerationSelect').value = '';
     document.getElementById('hgwMakerSelect').value = '';
     document.getElementById('routerMaker').value = '';
+    document.querySelectorAll('input[name="escalationName"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
     document.getElementById('solution').value = '';
     
     document.querySelectorAll('.lampStatus').forEach(el => {
@@ -693,6 +706,21 @@ wifi mode：
     copyText += `【対応状況】\n`;
     copyText += `・電源入れ直し: ${powerChecked}\n`;
     copyText += `・ケーブル入れ直し: ${cableChecked}\n`;
+    copyText += `\n`;
+
+    copyText += `【エスカレ】: `;
+    var firstFlagEscalationName = true;
+    document.querySelectorAll('input[name="escalationName"]').forEach(checkbox => {
+        if (checkbox.checked === true) {
+            const labelText = checkbox.nextSibling ? checkbox.nextSibling.textContent.trim() : '';
+            if (firstFlagEscalationName === true) {
+                copyText += labelText + 'さん';
+                firstFlagEscalationName = false;
+            } else {
+                copyText += '、' + labelText + 'さん';
+            }
+        }
+    });
     copyText += `\n`;
 
     copyText += `【セッション】: ${sessionVal}\n`;

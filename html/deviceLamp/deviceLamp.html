@@ -180,8 +180,8 @@
     <option value="RX-601">「RX-601」HGW(最新10G/無線内蔵型)</option>
     <option value="RX-600">「RX-600」HGW(最新10G対応/従来型単体型)</option>
     <option value="RX-">「RX-」HGW(従来型単体型)</option>
-    <option value="XG-200">「XG-200」HGW(フレッツ光クロス対応)</option>
-    <option value="XG-100">「XG-100」HGW(フレッツ光クロス対応)</option>
+    <option value="XG-200">「XG-200」HGW(ONUなし/フレッツ光クロス対応)</option>
+    <option value="XG-100">「XG-100」HGW(ONUなし/フレッツ光クロス対応)</option>
   </select>
   <br>
 
@@ -253,33 +253,6 @@ wifi mode：
 <label><input type="radio" name="wifiModeRadio" value="AP">AP</label>
 <br>
 <br>
-セッション：
-<label><input type="radio" name="sessionRadio" value="なし" checked>なし</label>
-<label><input type="radio" name="sessionRadio" value="あり">あり</label>
-<br>
-<br>
-
-エスカレ：
-<input type="checkbox" name="escalationName">菊池</input>
-<input type="checkbox" name="escalationName">広鰭</input>
-<input type="checkbox" name="escalationName">堂藤</input>
-<input type="checkbox" name="escalationName">矢田</input>
-<input type="checkbox" name="escalationName">内山</input>
-<br>
-<br>
-
-解決方法：<br>
-<select id="solution">
-	<option value="">--解決方法を選択してください--</option>
-	<option value="HGWConnectionSettings">HGWに接続設定をして解決</option>
-	<option value="routerConnectionSettings">ルーターに接続設定をして解決</option>
-	<option value="introduceRouterMaker">ルーターメーカーをご案内</option>
-	<option value="introduceLineProvider">回線業者をご案内</option>
-	<option value="reportMalfunction">故障受付しました</option>
-	<option value="transmitV6Signal">V6の信号を送信しました</option>
-</select>
-<br>
-<br>
 <button id="copyBtn" type="button">内容をコピー</button>
 <span id="copyMsg" class="copy-message">コピーしました！</span>
 
@@ -334,8 +307,7 @@ wifi mode：
     'lampStatusRv': patterns.hgwStandard,       // 「RV-」選択時の受け皿
     'lampStatusRx': patterns.hgwStandard,       // 「RX-」選択時の受け皿
     
-    // フレッツ光クロス対応・最新ルーター（10G仕様・マスタ個別化前の共通割り当て）
-    // RX-601：最新10G/無線内蔵型HGW（専用ランプパターン・無線簡単接続仕様内包）
+    // RX-601：最新10G/無線内蔵型HGW
     'lampStatusRx601': {
       'power': { 'label': '電源', 'options': { '緑色 点灯': { text: '電源が入っている' }, '消灯': { text: '電源が入っていない', alert: true } } },
       'alarm': { 'label': 'アラーム', 'options': { '赤色 点灯': { text: '障害状態', alert: true }, '赤色 点滅（10秒間）': { text: '「無線ＬＡＮ簡単接続機能」での設定失敗', alert: true }, '消灯': { text: '正常' } } },
@@ -347,7 +319,7 @@ wifi mode：
       'option': { 'label': 'オプション', 'options': { '緑色 点灯': { text: 'ひかり電話/ルータ機能利用不可', alert: true }, '緑色 点滅': { text: '無線ＬＡＮ（５ＧＨｚ帯）が動作中' }, '桃色 点滅': { text: '無線ＬＡＮ（２．４ＧＨｚ帯）が動作中' }, '青色 点滅': { text: '無線ＬＡＮ（５ＧＨｚ帯／２．４ＧＨｚ帯）が動作中' }, '水色 ３回点滅 → ２秒点灯': { text: 'ＵＳＢポートに機器が接続／切断' }, '消灯': { text: '無線ＬＡＮ機能が無効' } } }
     },
 
-    // RX-600：最新10G対応/従来型単体型HGW（専用ランプパターン仕様）
+    // RX-600：最新10G対応/従来型単体型HGW
     'lampStatusRx600': {
       'routerPowerSupply': { 'label': 'ルータ電源', 'options': { '緑 点灯': { text: '正常' }, '消灯': { text: '電源が入っていない', alert: true } } },
       'alarm': { 'label': 'アラーム', 'options': { '赤 点灯': { text: '装置障害', alert: true }, '赤 点滅（最大１０秒）': { text: 'ＵＳＢポートの異常を検出', alert: true }, '消灯': { text: '正常' } } },
@@ -358,8 +330,8 @@ wifi mode：
       'initialStatus': { 'label': '初期状態', 'options': { '橙 点灯': { text: '工場出荷時状態' }, '橙 点滅': { text: 'ＩＰアドレスが重複している', alert: true }, '消灯': { text: '正常' } } },
       'option': { 'label': 'オプション', 'options': { '緑 点滅': { text: '「無線ＬＡＮ簡単セットアップ」設定中または、内蔵無線ＬＡＮが５ＧＨｚ帯で動作中' }, '青 ３回点滅後、２秒点灯': { text: 'ＵＳＢポートに機器が接続された' }, '消灯': { text: '内蔵無線ＬＡＮが無効' } } }
     },
-    
-    // XG-200：最新10G対応HGW（専用ランプパターン・無線/MESHランプ追加）
+
+    // XG-200：最新10G対応HGW
     'lampStatusXg200': {
       'power': { 'label': '電源', 'options': { '緑色 点灯': { text: '電源が入っている' }, '消灯': { text: '電源が入っていない', alert: true } } },
       'alarm': { 'label': 'アラーム', 'options': { '赤色 点灯': { text: '障害状態', alert: true }, '赤色 点滅': { text: 'ソフトウェアの一時的異常', alert: true }, '赤色 点滅(10秒間)': { text: 'USBポート異常', alert: true }, '消灯': { text: '正常' } } },
@@ -373,7 +345,7 @@ wifi mode：
       'option': { 'label': 'オプション', 'options': { '緑色 点灯': { text: 'ひかり電話/ルータ機能利用不可', alert: true }, '橙色 点灯': { text: 'アダプタモード動作中' }, '水色 ３回点滅 → ２秒点灯': { text: 'USBポートへの機器接続' }, '消灯': { text: '通常状態' } } }
     },
 
-    // XG-100：フレッツ光クロス対応HGW（専用ランプパターン・オプションランプが無線兼用仕様）
+    // XG-100：フレッツ光クロス対応HGW
     'lampStatusXg100': {
       'power': { 'label': '電源', 'options': { '緑色 点灯': { text: '電源が入っている' }, '消灯': { text: '電源が入っていない', alert: true } } },
       'alarm': { 'label': 'アラーム', 'options': { '赤色 点灯': { text: '障害状態', alert: true }, '消灯': { text: '正常' } } },
@@ -384,8 +356,7 @@ wifi mode：
       'initialStatus': { 'label': '初期状態', 'options': { '橙色 点灯': { text: '工場出荷状態（初期化状態）' }, '橙色 点滅': { text: 'ＩＰｖ４アドレスが重複', alert: true }, '赤色 点灯': { text: '装置障害', alert: true }, '消灯': { text: '通常状態' } } },
       'option': { 'label': 'オプション', 'options': { '緑色 点灯': { text: 'ルータ機能利用不可', alert: true }, '緑色 点滅': { text: '無線ＬＡＮ（５ＧＨｚ帯）が動作中' }, '桃色 点滅': { text: '無線ＬＡＮ（２．４ＧＨｚ帯）が動作中' }, '青色 点滅': { text: '無線ＬＡＮ（５ＧＨｚ帯／２．４ＧＨｚ帯）が動作中' }, '水色 ３回点滅 → ２秒点灯': { text: 'ＵＳＢポートに機器が接続／切断' }, '消灯': { text: '無線ＬＡＮ機能が無効' } } }
     },
-    
-    // RV-440：VDSL一体型HGW（専用ランプパターン・無線セットアップ仕様内包）
+    // RV-440：VDSL一体型HGW
     'lampStatusRv440': {
       'routerPowerSupply': { 'label': 'ルータ電源', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '電源が入っていない', alert: true } } },
       'alarm': { 'label': 'アラーム', 'options': { '赤点灯': { text: '装置障害', alert: true }, '赤点滅（最大１秒）': { text: 'ＵＳＢポートの異常を検出', alert: true }, '赤点滅(10秒間/無線LAN設定時)': { text: '無線LAN簡単セットアップ設定失敗', alert: true }, '消灯': { text: '正常' } } },
@@ -399,7 +370,7 @@ wifi mode：
       'fail': { 'label': 'ＦＡＩＬ', 'options': { '赤点灯': { text: '装置障害', alert: true }, '消灯': { text: '正常' } } }
     },
 
-    // RV-S340：第3世代 VDSL一体型HGW（専用ランプパターン・オプションなし）
+    // RV-S340：第3世代 VDSL一体型HGW
     'lampStatusRvS340': {
       'power': { 'label': '電源', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '電源が入っていない', alert: true } } },
       'alarm': { 'label': 'アラーム', 'options': { '赤点灯': { text: '異常', alert: true }, '消灯': { text: '正常' } } },
@@ -425,14 +396,19 @@ wifi mode：
       'smallOnuStatus': { 'label': 'ランプ状態\n(上下2つの組み合わせ)', 'options': { '上：緑 / 下：緑': { text: '正常' }, '上：赤 / 下：消灯': { text: '光信号未到達。ケーブル緩み確認。', alert: true }, '上：赤 / 下：緑': { text: '未認証またはMACアドレス相違。', alert: true }, '上：赤 / 下：赤': { text: '機器の故障。', alert: true } } }
     },
 
-    // 単体VDSLモデム
+    // 単体VDSLモデム（vh-100等 現場準拠版仕様）
     'lampStatusVdsl': {
-      'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置の電源が入っていません。', alert: true } } },
-      'vdsl': { 'label': 'VDSL\n(LINE)', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '同期中・接続確立の準備中。', alert: false }, '消灯': { text: 'VDSL回線不確立。', alert: true } } },
-      'lan': { 'label': 'LAN\n(PC)', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '正常（通信中）' }, '消灯': { text: '端末機器とのリンク未確立。', alert: true } } },
-      'alarm': { 'label': 'アラーム\n(FAIL)', 'options': { '赤点灯': { text: '装置故障状態。', alert: true }, '消灯': { text: '正常' } } }
+      'power': { 'label': 'POWER', 'options': { '緑 点灯': { text: '通電中' }, '消灯': { text: '電源が切れている時', alert: true } } },
+      'vdslLink': { 'label': 'VDSL LINK\nLINE', 'options': { '緑 点灯': { text: 'VDSLリンクアップ時' }, '緑 点滅': { text: 'トレーニング中' }, '消灯': { text: '待機中', alert: true } } },
+      'lanLink': { 'label': 'LAN LINK', 'options': { '緑 点灯': { text: 'LANリンクアップ時' }, '消灯': { text: 'LANリンクダウン時', alert: true } } },
+      'lanAct': { 'label': 'LAN ACT', 'options': { '緑 点滅': { text: 'データが流れている時' }, '消灯': { text: 'データがない時' } } },
+      'alarm': { 'label': 'ALARMランプ', 'options': { '赤 点灯': { text: '障害時', alert: true }, '赤 点滅': { text: 'セルフテスト中', alert: true }, '消灯': { text: '正常時' } } }
     }
   };
+
+
+
+
   // ==========================================
   // 3. グローバル変数 & フォーム生成ロジック
   // ==========================================
@@ -579,10 +555,8 @@ wifi mode：
     document.getElementById('hgwGenerationSelect').value = '';
     document.getElementById('hgwMakerSelect').value = '';
     document.getElementById('routerMaker').value = '';
-    document.querySelectorAll('input[name="escalationName"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-    document.getElementById('solution').value = '';
+    const wifiRadios = document.getElementsByName('wifiModeRadio');
+    wifiRadios.forEach(r => { if (r.value === '不明') r.checked = true; });
     
     document.querySelectorAll('.lampStatus').forEach(el => {
       el.style.display = 'none';
@@ -708,31 +682,6 @@ wifi mode：
     copyText += `・ケーブル入れ直し: ${cableChecked}\n`;
     copyText += `\n`;
 
-    copyText += `【エスカレ】: `;
-    var firstFlagEscalationName = true;
-    document.querySelectorAll('input[name="escalationName"]').forEach(checkbox => {
-        if (checkbox.checked === true) {
-            const labelText = checkbox.nextSibling ? checkbox.nextSibling.textContent.trim() : '';
-            if (firstFlagEscalationName === true) {
-                copyText += labelText + 'さん';
-                firstFlagEscalationName = false;
-            } else {
-                copyText += '、' + labelText + 'さん';
-            }
-        }
-    });
-    copyText += `\n`;
-
-    copyText += `【セッション】: ${sessionVal}\n`;
-    copyText += `\n`;
-
-    // 5. 解決方法の情報を追記
-    const solutionText = '';
-    if (solutionVal) {
-      solutionText = solutionEl.options[solutionEl.selectedIndex].text;
-    }
-    copyText += `【解決方法】: ${solutionText}\n`;
-
     // 末尾の余分な改行を削除して調整
     // copyText = copyText.trim();
 
@@ -755,15 +704,8 @@ wifi mode：
     });
   });
 
-  // 新設ラジオボタンのイベント登録
+  // ラジオボタンのイベント登録
   document.querySelectorAll('input[name="wifiModeRadio"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      document.getElementById('copyMsg').style.display = 'none';
-    });
-  });
-
-  // ラジオボタン変更時にコピーメッセージを非表示にするイベントを追加
-  document.querySelectorAll('input[name="sessionRadio"]').forEach(radio => {
     radio.addEventListener('change', () => {
       document.getElementById('copyMsg').style.display = 'none';
     });

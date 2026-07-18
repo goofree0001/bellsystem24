@@ -388,7 +388,8 @@ wifi mode：
       'auth': { 'label': '認証\n(AUTH)', 'options': { '緑点灯': { text: '正常' }, '消灯': { text: '装置運用準備中または故障発生状態', alert: true } } },
       'uni': { 'label': 'ＵＮＩ', 'options': { '緑点灯': { text: '正常' }, '緑点滅': { text: '正常（通信中）' }, '消灯': { text: '端末機器とのリンク未確立', alert: true } } },
       'hikariLine': { 'label': '光回線\n(PON/TEST)', 'options': { '緑点灯': { text: '正常' }, '橙点灯': { text: '装置運用準備中または故障発生状態', alert: true }, '橙点滅': { text: 'ソフトウェアダウンロード中' }, '消灯': { text: '光の信号が届いていない可能性', alert: true } } },
-      'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '赤点灯': { text: '装置故障状態。', alert: true }, '赤点滅': { text: 'ダウンロード中もしくはダウンロード完了状態' }, '消灯': { text: '装置の電源が入っておりません', alert: true } } }
+      'power': { 'label': '電源\n(POWER)', 'options': { '緑点灯': { text: '正常' }, '赤点灯': { text: '装置故障状態。', alert: true }, '赤点滅': { text: 'ダウンロード中もしくはダウンロード完了状態' }, '消灯': { text: '装置の電源が入っておりません', alert: true } } },
+      'videoOutput': { 'label': '映像出力\n(GV-ONUのみ)', 'options': { '緑点灯': { text: '正常' }, '赤点灯': { text: '受信異常や未契約', alert: true }, '消灯': { text: '受信異常や未契約', alert: true } } }
     },
 
     // 小型ONU（スティック型）
@@ -405,9 +406,6 @@ wifi mode：
       'alarm': { 'label': 'ALARMランプ', 'options': { '赤 点灯': { text: '障害時', alert: true }, '赤 点滅': { text: 'セルフテスト中', alert: true }, '消灯': { text: '正常時' } } }
     }
   };
-
-
-
 
   // ==========================================
   // 3. グローバル変数 & フォーム生成ロジック
@@ -575,13 +573,10 @@ wifi mode：
     const hgwMakerVal = document.getElementById('hgwMakerSelect').value;
     const routerMakerEl = document.getElementById('routerMaker');
     const routerMakerVal = routerMakerEl.value;
-    const solutionEl = document.getElementById('solution');
-    const solutionVal = solution.value;
 
     
     // 各ラジオボタンの選択値を取得
     const wifiModeVal = document.querySelector('input[name="wifiModeRadio"]:checked').value;
-    const sessionVal = document.querySelector('input[name="sessionRadio"]:checked').value;
 
     // 機器情報もルーターメーカーも選ばれていない場合のバリデーション
     if (!activeOnuVdslContainerId && !activeHgwContainerId && !routerMakerVal) {
